@@ -4,21 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Person_type;
-use App\Http\Requests\Person_typeStoreUpdateFormRequest;
+use App\Models\Marital_status;
+use App\Http\Requests\Marital_statusStoreUpdateFormRequest;
 
-class Person_typeController extends Controller
+class Marital_statusController extends Controller
 {
-    private $person_type;
+    private $marital_status;
     private $totalPage = 10;
     private $get;
 
-    public function __construct(Request $request, Person_type $person_type)
+    public function __construct(Request $request, Marital_status $marital_status)
     {
-        $this->person_type = $person_type;
+        $this->marital_status = $marital_status;
         $this->get = $request;
     }
-    
+
+
     /**
      * Display a listing of the resource.
      *
@@ -28,8 +29,8 @@ class Person_typeController extends Controller
     {
         $order = $this->get->get('order', 'ASC');
         $by = $this->get->get('by', 'description');
-        $person_types = $this->person_type->orderBy($by, $order)->paginate($this->totalPage);
-        return view('admin.person_type.index', compact('person_types'));
+        $marital_statuses = $this->marital_status->orderBy($by, $order)->paginate($this->totalPage);
+        return view('admin.marital_status.index', compact('marital_statuses'));
     }
 
     /**
@@ -39,7 +40,7 @@ class Person_typeController extends Controller
      */
     public function create()
     {
-        return view('admin.person_type.create');
+        return view('admin.marital_status.create');
     }
 
     /**
@@ -48,12 +49,12 @@ class Person_typeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Person_typeStoreUpdateFormRequest $request)
+    public function store(Marital_statusStoreUpdateFormRequest $request)
     {
         $dataForm = $request->all();
-        $insert = $this->person_type->create($dataForm);
+        $insert = $this->marital_status->create($dataForm);
         if($insert)
-            return redirect()->route('person_types.index')->with('success', 'Cadastro realizado com sucesso!');
+            return redirect()->route('marital_status.index')->with('success', 'Cadastro realizado com sucesso!');
         else
             return redirect()->back()->with('error', 'Falha ao cadastrar');
     }
@@ -66,10 +67,10 @@ class Person_typeController extends Controller
      */
     public function edit($id)
     {
-        $person_type = $this->person_type->find($id);
-        if(!$person_type)
+        $marital_status = $this->marital_status->find($id);
+        if(!$marital_status)
             return redirect()->back()->with('error', 'Falha ao editar');
-        return view('admin.person_type.edit', compact('person_type'));       
+        return view('admin.marital_status.edit', compact('marital_status'));
     }
 
     /**
@@ -79,14 +80,14 @@ class Person_typeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Person_typeStoreUpdateFormRequest $request, $id)
+    public function update(Marital_statusStoreUpdateFormRequest $request, $id)
     {
-        $person_type = $this->person_type->find($id);
-        if(!$person_type)
+        $marital_status = $this->marital_status->find($id);
+        if(!$marital_status)
             return redirect()->back()->with('error', 'Falha ao editar');
-        $update = $person_type->update($request->all());    
+        $update = $marital_status->update($request->all());    
         if($update)
-            return redirect()->route('person_types.index')->with('success', 'Cadastro atualizado com sucesso!');
+            return redirect()->route('marital_status.index')->with('success', 'Cadastro atualizado com sucesso!');
         else
             return redirect()->back()->with('error', 'Falha ao atualizar.');
     }
@@ -99,11 +100,11 @@ class Person_typeController extends Controller
      */
     public function destroy($id)
     {
-        $person_type = $this->person_type->find($id);
-        if(!$person_type)
+        $marital_status = $this->marital_status->find($id);
+        if(!$marital_status)
             return redirect()->back()->with('error', 'Falha ao excluir');
-        if($person_type->delete())
-            return redirect()->route('person_types.index')->with('success', 'Registro excluído com sucesso!');
+        if($marital_status->delete())
+            return redirect()->route('marital_status.index')->with('success', 'Registro excluído com sucesso!');
         else
             return redirect()->back()->with('error', 'Erro ao excluir registro.');
     }
@@ -115,11 +116,12 @@ class Person_typeController extends Controller
         $keySearch = $request->key_search;
         $order = $this->get->get('order', 'ASC');
         $by = $this->get->get('by', 'description');
-        $person_types = $this->person_type
+        $marital_statuses = $this->marital_status
                     ->where('description', 'LIKE', "%{$keySearch}%")
                     ->orderBy($by, $order)
                     ->paginate($this->totalPage);
 
-        return view('admin.person_type.index', compact('person_types', 'title', 'dataForm'));
+
+        return view('admin.marital_status.index', compact('marital_statuses', 'title', 'dataForm'));
     }
 }

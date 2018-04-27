@@ -196,7 +196,7 @@ return [
                         ],
                         [
                             'text' => 'Estados civís',
-                            'url'  => 'admin/matiral_status',
+                            'url'  => 'admin/marital_status',
                             'icon' => 'circle-o',
                         ],
                         [

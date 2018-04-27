@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Editar tipos de pessoa')
+@section('title')
 
 @section('content_header')
     <h1>Editar tipos de pessoa</h1>

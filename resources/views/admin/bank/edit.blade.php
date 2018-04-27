@@ -3,12 +3,12 @@
 @section('title')
 
 @section('content_header')
-    <h1>Adicionar tipos de pessoa</h1>
+    <h1>Editar banco</h1>
     
     <ol class="breadcrumb">
         <li><a href="{{ route('admin.index')}}">Home</a></li>
-        <li><a href="{{ route('person_types.index') }}">Tipos de pessoa</a></li>
-        <li>Adicionar</li>
+        <li><a href="{{ route('bank.index') }}">Bancos</a></li>
+        <li>Editar</li>
     </ol>
 @stop
 
@@ -21,15 +21,15 @@
                 
                 <div class="box-body">
 
-                        {!! Form::open(['route' => 'person_types.store', 'id' => 'form_add', 'method' => 'POST']) !!}
-                            @include('admin.person_type.form')
+                        {!! Form::model($bank,['route' => ['bank.update', $bank->id], 'id' => 'form_upd', 'method' => 'PUT']) !!}
+                            @include('admin.bank.form')
                         {!! Form::close() !!}
 
                 </div><!-- /.box-body -->
 
                 <div class="box-footer text-right">
-                    <a href="{{ route('person_types.index') }}" class="btn btn-sm btn-default">Voltar</a>
-                    {!! Form::submit('Salvar', ['class' => 'btn btn-sm btn-success', 'form' => 'form_add']) !!}
+                    <a href="{{ route('bank.index') }}" class="btn btn-sm btn-default">Voltar</a>
+                    {!! Form::submit('Salvar', ['class' => 'btn btn-sm btn-success', 'form' => 'form_upd']) !!}
                 </div>
 
             </div><!-- /.box -->

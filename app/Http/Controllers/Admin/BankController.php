@@ -4,18 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Person_type;
-use App\Http\Requests\Person_typeStoreUpdateFormRequest;
+use App\Models\Bank;
+use App\Http\Requests\BankStoreUpdateFormRequest;
 
-class Person_typeController extends Controller
+class BankController extends Controller
 {
-    private $person_type;
+    private $bank;
     private $totalPage = 10;
     private $get;
 
-    public function __construct(Request $request, Person_type $person_type)
+    public function __construct(Request $request, Bank $bank)
     {
-        $this->person_type = $person_type;
+        $this->bank = $bank;
         $this->get = $request;
     }
     
@@ -27,9 +27,9 @@ class Person_typeController extends Controller
     public function index()
     {
         $order = $this->get->get('order', 'ASC');
-        $by = $this->get->get('by', 'description');
-        $person_types = $this->person_type->orderBy($by, $order)->paginate($this->totalPage);
-        return view('admin.person_type.index', compact('person_types'));
+        $by = $this->get->get('by', 'name');
+        $banks = $this->bank->orderBy($by, $order)->paginate($this->totalPage);
+        return view('admin.bank.index', compact('banks'));
     }
 
     /**
@@ -39,7 +39,7 @@ class Person_typeController extends Controller
      */
     public function create()
     {
-        return view('admin.person_type.create');
+        return view('admin.bank.create');
     }
 
     /**
@@ -48,14 +48,25 @@ class Person_typeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Person_typeStoreUpdateFormRequest $request)
+    public function store(BankStoreUpdateFormRequest $request)
     {
         $dataForm = $request->all();
-        $insert = $this->person_type->create($dataForm);
+        $insert = $this->bank->create($dataForm);
         if($insert)
-            return redirect()->route('person_types.index')->with('success', 'Cadastro realizado com sucesso!');
+            return redirect()->route('bank.index')->with('success', 'Cadastro realizado com sucesso!');
         else
             return redirect()->back()->with('error', 'Falha ao cadastrar');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
     }
 
     /**
@@ -66,10 +77,10 @@ class Person_typeController extends Controller
      */
     public function edit($id)
     {
-        $person_type = $this->person_type->find($id);
-        if(!$person_type)
+        $bank = $this->bank->find($id);
+        if(!$bank)
             return redirect()->back()->with('error', 'Falha ao editar');
-        return view('admin.person_type.edit', compact('person_type'));       
+        return view('admin.bank.edit', compact('bank'));
     }
 
     /**
@@ -79,14 +90,14 @@ class Person_typeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Person_typeStoreUpdateFormRequest $request, $id)
+    public function update(BankStoreUpdateFormRequest $request, $id)
     {
-        $person_type = $this->person_type->find($id);
-        if(!$person_type)
+        $bank = $this->bank->find($id);
+        if(!$bank)
             return redirect()->back()->with('error', 'Falha ao editar');
-        $update = $person_type->update($request->all());    
+        $update = $bank->update($request->all());    
         if($update)
-            return redirect()->route('person_types.index')->with('success', 'Cadastro atualizado com sucesso!');
+            return redirect()->route('bank.index')->with('success', 'Cadastro atualizado com sucesso!');
         else
             return redirect()->back()->with('error', 'Falha ao atualizar.');
     }
@@ -99,11 +110,11 @@ class Person_typeController extends Controller
      */
     public function destroy($id)
     {
-        $person_type = $this->person_type->find($id);
-        if(!$person_type)
+        $bank = $this->bank->find($id);
+        if(!$bank)
             return redirect()->back()->with('error', 'Falha ao excluir');
-        if($person_type->delete())
-            return redirect()->route('person_types.index')->with('success', 'Registro excluído com sucesso!');
+        if($bank->delete())
+            return redirect()->route('bank.index')->with('success', 'Registro excluído com sucesso!');
         else
             return redirect()->back()->with('error', 'Erro ao excluir registro.');
     }
@@ -115,11 +126,11 @@ class Person_typeController extends Controller
         $keySearch = $request->key_search;
         $order = $this->get->get('order', 'ASC');
         $by = $this->get->get('by', 'description');
-        $person_types = $this->person_type
+        $banks = $this->bank
                     ->where('description', 'LIKE', "%{$keySearch}%")
                     ->orderBy($by, $order)
                     ->paginate($this->totalPage);
 
-        return view('admin.person_type.index', compact('person_types', 'title', 'dataForm'));
+        return view('admin.bank.index', compact('banks', 'title', 'dataForm'));
     }
 }
