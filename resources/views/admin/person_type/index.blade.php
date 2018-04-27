@@ -1,0 +1,77 @@
+@extends('adminlte::page')
+
+@section('title', 'Tipos de pessoa')
+
+@section('content_header')
+    <h1>Tipos de pessoa</h1>
+
+    <ol class="breadcrumb">
+        <li><a href="{{ route('admin.index')}}">Home</a></li>
+        <li>Tipos de pessoa</li>
+    </ol>
+@stop
+
+@section('content')
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                @include('admin.includes.alerts')
+                <div class="box-header">
+                    <a href="{{ route('person_types.create') }}" class="btn bg-olive btn-xm" title="Adicionar registro"><i class="fa fa-plus-square" aria-hidden="true"></i> Adicionar</a>
+                    <div class="box-tools">
+                        {!! Form::open(['route' => 'person_types.search', 'method' => 'POST']) !!}
+                            @include('admin.includes.formsearch')
+                        {!! Form::close() !!}
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+
+                    @if(isset($dataForm['key_search']))
+                        <div class="alert alert-info">
+                            <p>
+                                <a href="{{ route('person_types.index') }}" style="text-decoration: none"><i class="fa fa-refresh"></i>&nbsp;</a>
+                                <b>Resultados para:</b> {{ $dataForm['key_search'] }}
+                            </p>
+                        </div>
+                    @endif()
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th><a href="{{Order::url('description')}}">Descrição</a></th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($person_types as $person_type)
+                                <tr>
+                                    <td>{{ $person_type->description }}</th>
+                                    <td class="text-center">
+                                        {!! Form::open(['route' => ['person_types.destroy', $person_type->id], 'method' => 'DELETE']) !!}
+                                            <a href="{{ route('person_types.edit', $person_type->id) }}" class="btn btn-primary btn-xs" title="Editar registro"><i class="fa fa-pencil-square" aria-hidden="true"></i> Editar</a>
+                                            <button type="submit" class="btn btn-danger btn-xs" title="Excluir registro" onclick="javascript: return confirm('Tem certeza que deseja excluir registro?.');">
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i> Excluir
+                                            </button>
+                                        {!! Form::close() !!}
+                                    </td>
+                                </tr>                                
+                            @empty
+                                <tr>
+                                    <td colspan="2" class="text-center">Nenhum tipo de pessoa cadastrado!</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                        @if(isset($dataForm))
+                            {!! $person_types->appends($dataForm)->links()  !!}
+                        @else
+                            {!! $person_types->links()  !!}
+                        @endif
+                    </div>
+                    
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+@stop
