@@ -107,7 +107,7 @@ class User extends Authenticatable
 
         $dataForm['user_id'] = $id;
         $dataForm['date_birth'] = formatDateAndTime(str_replace('/', '-', $dataForm['date_birth']), "Y-m-d");
-        $upd = $person_physical->update($dataForm);
+        $updPersonPhysical = $this->person_physical->update($dataForm);
         
         // Atualizo a tabela users
         $this->name = $dataForm['name'];
@@ -129,12 +129,12 @@ class User extends Authenticatable
         else
             $this->is_admin = 0;
        
-        $newUser = $this->save();
+        $updUser = $this->save();
 
         // Verifico se tudo ocorreu bem e dou commit ou rollback
-        if($newUser && $person_physical){
+        if($updUser && $updPersonPhysical){
             DB::commit();
-            return $newUser;
+            return $updUser;
         } else {
             DB::roolback();
             return false;
@@ -147,6 +147,7 @@ class User extends Authenticatable
         
         $keySearch = $request->key_search;
         return $this->where('name', 'LIKE', "%{$keySearch}%")
+                    ->orwhere('email', 'LIKE', "%{$keySearch}%")
                     ->paginate($totalPage);
     }
 }

@@ -66,7 +66,12 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = $this->user->with(['person_physical', 'person_type'])->find($id);
+        if(!$user)
+            return redirect()->back()->with('error', 'Falha ao detalhar');
+        
+        return view('admin.user.show', compact('user'));
+        
     }
 
     /**
@@ -97,7 +102,7 @@ class UserController extends Controller
         $user = $this->user->with(['person_physical', 'person_type'])->find($id);
         if(!$user)
             return redirect()->back();
-        if($user->updateUser($request, $user->id, $user->person_physical))
+        if($user->updateUser($request, $user->id))
             return redirect()->route('user.index')->with('success', 'Cadastro editado com sucesso!');
         else
             return redirect()->back()->with('error', 'Falha ao editar!')->withInput();
@@ -111,6 +116,21 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = $this->user->find($id);
+        if(!$user)
+            return redirect()->back()->with('error', 'Falha ao excluir.');
+        if($user->delete())
+            return redirect()->route('user.index')->with('success', 'Usuário excluído com sucesso!');
+        else
+            return redirect()->back()->with('error', 'Falha ao excluir.');
+    }
+
+    public function search(Request $request)
+    {
+        $dataForm = $request->except('_token');
+        
+        $users = $this->user->search($request, $this->totalPage);
+        
+        return view('admin.user.index', compact('users', 'dataForm'));
     }
 }

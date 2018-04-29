@@ -38,8 +38,13 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
+                            @if(isset($dataForm))
+                                <th>Nome / Razão social</th>
+                                <th>E-mail</th>
+                            @else
                                 <th><a href="{{Order::url('name')}}">Nome / Razão social</a></th>
                                 <th><a href="{{Order::url('email')}}">E-mail</a></th>
+                            @endif
                                 <th class="text-center">Ações</th>
                             </tr>
                         </thead>

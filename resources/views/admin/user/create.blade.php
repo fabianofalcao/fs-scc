@@ -28,7 +28,7 @@
                 </div><!-- /.box-body -->
 
                 <div class="box-footer text-right">
-                    <a href="{{ route('user.index') }}" class="btn btn-sm btn-default">Voltar</a>
+                    <a href="{{ route('user.index') }}" class="btn btn-sm btn-default"><i class="fa fa-undo" aria-hidden="true"></i> Voltar</a>
                     {!! Form::submit('Salvar', ['class' => 'btn btn-sm btn-success', 'form' => 'form_add']) !!}
                 </div>
 
