@@ -13,25 +13,41 @@
         <div class="col-lg-3">
             <div class="form-group">
                 <label for="cpf">CPF *</label>
+                @if(isset($user))
+                {!! Form::text('cpf', $user->person_physical->cpf, ['class' => 'form-control input-sm', 'required']) !!}
+                @else
                 {!! Form::text('cpf', null, ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
             </div>
         </div>
         <div class="col-lg-3">
             <div class="form-group">
                 <label for="rg">Identidade</label>
+                @if(isset($user))
+                {!! Form::text('rg', $user->person_physical->rg, ['class' => 'form-control input-sm']) !!}
+                @else
                 {!! Form::text('rg', null, ['class' => 'form-control input-sm']) !!}
+                @endif
             </div>
         </div>
         <div class="col-lg-3">
             <div class="form-group">
                 <label for="date_birth">Data Nascimento *</label>
+                @if(isset($user))
+                {!! Form::text('date_birth', formatDateAndTime($user->person_physical->date_birth), ['class' => 'form-control input-sm', 'required']) !!}
+                @else
                 {!! Form::text('date_birth', null, ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
             </div>
         </div>
         <div class="col-lg-3">
             <div class="form-group">
                 <label for="sexo">Sexo *</label>
+                @if(isset($user))
+                {!! Form::select('sexo', $sexos, $user->person_physical->sexo, ['class' => 'form-control input-sm', 'required']) !!}
+                @else
                 {!! Form::select('sexo', $sexos, null, ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
             </div>
         </div>
     </div>
@@ -50,13 +66,21 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="password">Senha *</label>
+                @if(isset($user))
+                {!! Form::password('password', ['class' => 'form-control input-sm']) !!}
+                @else
                 {!! Form::password('password', ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
             </div>
         </div>
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="password_confirmation">Confirmar senha *</label>
+                @if(isset($user))
+                {!! Form::password('password_confirmation', ['class' => 'form-control input-sm']) !!}
+                @else
                 {!! Form::password('password_confirmation', ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
             </div>
         </div>
     </div>

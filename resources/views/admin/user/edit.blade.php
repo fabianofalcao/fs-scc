@@ -3,11 +3,11 @@
 @section('title')
 
 @section('content_header')
-    <h1>Editar banco</h1>
+    <h1>Editar usuário</h1>
     
     <ol class="breadcrumb">
         <li><a href="{{ route('admin.index')}}">Home</a></li>
-        <li><a href="{{ route('bank.index') }}">Bancos</a></li>
+        <li><a href="{{ route('user.index') }}">Usuários</a></li>
         <li>Editar</li>
     </ol>
 @stop
@@ -21,14 +21,14 @@
                 
                 <div class="box-body">
 
-                        {!! Form::model($bank,['route' => ['bank.update', $bank->id], 'id' => 'form_upd', 'method' => 'PUT']) !!}
-                            @include('admin.bank.form')
+                        {!! Form::model($user,['route' => ['user.update', $user->id], 'id' => 'form_upd', 'method' => 'PUT']) !!}
+                            @include('admin.user.form')
                         {!! Form::close() !!}
 
                 </div><!-- /.box-body -->
 
                 <div class="box-footer text-right">
-                    <a href="{{ route('bank.index') }}" class="btn btn-sm btn-default">Voltar</a>
+                    <a href="{{ route('user.index') }}" class="btn btn-sm btn-default">Voltar</a>
                     {!! Form::submit('Salvar', ['class' => 'btn btn-sm btn-success', 'form' => 'form_upd']) !!}
                 </div>
 

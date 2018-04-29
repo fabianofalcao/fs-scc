@@ -41,8 +41,7 @@ class UserController extends Controller
     {
         
         $sexos = ['' => 'Selecione o sexo', 'Feminino' => 'Feminino', 'Masculino' => 'Masculino'];
-        
-        return view('admin.user.create', compact('sexos'));
+        return view('admin.user.create', compact('sexos', 'user'));
     }
 
     /**
@@ -78,7 +77,12 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = $this->user->with(['person_physical', 'person_type'])->find($id);
+        $sexos = ['' => 'Selecione o sexo', 'Feminino' => 'Feminino', 'Masculino' => 'Masculino'];
+        if(!$user)        
+            return redirect()->back();
+        return view('admin.user.edit', compact('user', 'sexos'));
+        
     }
 
     /**
@@ -90,7 +94,13 @@ class UserController extends Controller
      */
     public function update(UserStoreUpdateFormRequest $request, $id)
     {
-        //
+        $user = $this->user->with(['person_physical', 'person_type'])->find($id);
+        if(!$user)
+            return redirect()->back();
+        if($user->updateUser($request, $user->id, $user->person_physical))
+            return redirect()->route('user.index')->with('success', 'Cadastro editado com sucesso!');
+        else
+            return redirect()->back()->with('error', 'Falha ao editar!')->withInput();
     }
 
     /**

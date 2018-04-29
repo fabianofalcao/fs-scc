@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laraerp\Ordination\OrdinationTrait;
 use DB;
 use App\Models\Person_physical;
+use App\Models\Person_type;
 
 class User extends Authenticatable
 {
@@ -31,6 +32,16 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function person_physical()
+    {
+        return $this->hasOne(Person_physical::class);
+    }
+
+    public function person_type()
+    {
+        return $this->belongsTo(Person_type::class);
+    }
 
     
     public function newUser($request)
@@ -59,13 +70,66 @@ class User extends Authenticatable
         $this->address_neighborhood = $dataForm['address_neighborhood'];
         $this->address_city = $dataForm['address_city'];
         $this->address_state = $dataForm['address_state'];
-        $this->is_admin = ($dataForm['is_admin'] ? 1 : 0);
+        if(isset($dataForm['is_admin']))
+            $this->is_admin = 1;
+        else
+            $this->is_admin = 0;
         $newUser = $this->save();
 
         // Cadastro na tabela pessoa física
         $dataForm['user_id'] = $this->id;
         $dataForm['date_birth'] = formatDateAndTime(str_replace('/', '-', $dataForm['date_birth']), "Y-m-d");
         $person_physical = Person_physical::create($dataForm);
+
+        // Verifico se tudo ocorreu bem e dou commit ou rollback
+        if($newUser && $person_physical){
+            DB::commit();
+            return $newUser;
+        } else {
+            DB::roolback();
+            return false;
+        }
+    }
+
+    public function updateUser($request, $id, $person_physical)
+    {
+        $dataForm = $request->all();
+        $dataForm['cpf'] = preg_replace('/[^0-9]/', '', $dataForm['cpf']);
+        $dataForm['phone'] = preg_replace('/[^0-9]/', '', $dataForm['phone']);
+        $dataForm['cell'] = preg_replace('/[^0-9]/', '', $dataForm['cell']);
+        $dataForm['address_zipcode'] = preg_replace('/[^0-9]/', '', $dataForm['address_zipcode']);
+        $dataForm['password'] = bcrypt($dataForm['password']);
+
+        //Inicio a transação
+        DB::beginTransaction();
+
+        // Atualizo os dados da tabela pessoa física
+
+        $dataForm['user_id'] = $id;
+        $dataForm['date_birth'] = formatDateAndTime(str_replace('/', '-', $dataForm['date_birth']), "Y-m-d");
+        $upd = $person_physical->update($dataForm);
+        
+        // Atualizo a tabela users
+        $this->name = $dataForm['name'];
+        if($request->password && $request->password != '')
+            $this->password = bcrypt($request->password);
+        $this->email = $dataForm['email'];
+        $this->person_type_id = $dataForm['person_type_id'];
+        $this->phone = $dataForm['phone'];
+        $this->cell = $dataForm['cell'];
+        $this->address_zipcode = $dataForm['address_zipcode'];
+        $this->address_street = $dataForm['address_street'];
+        $this->address_number = $dataForm['address_number'];
+        $this->address_complement = $dataForm['address_complement'];
+        $this->address_neighborhood = $dataForm['address_neighborhood'];
+        $this->address_city = $dataForm['address_city'];
+        $this->address_state = $dataForm['address_state'];
+        if(isset($dataForm['is_admin']))
+            $this->is_admin = 1;
+        else
+            $this->is_admin = 0;
+       
+        $newUser = $this->save();
 
         // Verifico se tudo ocorreu bem e dou commit ou rollback
         if($newUser && $person_physical){
