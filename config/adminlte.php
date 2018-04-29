@@ -182,7 +182,7 @@ return [
                 ],
                 [
                     'text' => 'Usuários',
-                    'url'  => 'admin/settings/users',
+                    'url'  => 'admin/user',
                     'icon' => 'circle-o',
                 ],
                 [

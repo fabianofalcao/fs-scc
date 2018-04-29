@@ -10,6 +10,10 @@ $this->group(['middleware' => ['auth'], 'namespace' => 'Admin', 'prefix' => 'adm
 
     $this->any('banks/search', 'BankController@search')->name('bank.search');
     $this->resource('bank', 'BankController');
+
+    $this->any('user/search', 'UserController@search')->name('user.search');
+    $this->resource('user', 'UserController');
+
 });
    
 
