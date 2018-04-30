@@ -15,6 +15,8 @@ class CreateCovenantsTable extends Migration
     {
         Schema::create('covenants', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('company_id')->unsigned();
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade')->nullable();
             $table->string('description', 100);
             $table->enum('billing_type', ['Porcentagem', 'Valor fixo']);
             $table->double('percentage_value', 8, 2);

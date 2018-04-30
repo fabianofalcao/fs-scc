@@ -19,7 +19,7 @@ class CreatePersonLegalsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('cnpj', 14)->unique();
             $table->string('ie', 20)->nullable();
-            $table->string('im', 20)->nullalble();
+            $table->string('im', 20)->nullable();
             $table->string('responsible_name', 100)->nullable();
         });
     }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateCompaniesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,13 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('person_types', function (Blueprint $table) {
+        Schema::create('companies', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description', 100);
-        });
-        
-        Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('person_type_id')->unsigned();
-            $table->foreign('person_type_id')->references('id')->on('person_types')->onDelete('cascade');
-            $table->integer('company_id')->unsigned()->nullable();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->string('name', 100);
+            $table->string('cnpj', 14)->unique();
+            $table->string('ie', 20)->nullable();
+            $table->string('im', 20)->nullable();
+            $table->string('responsible_name', 100)->nullable();
             $table->string('email', 191)->unique();
             $table->string('password', 191);
             $table->string('image', 191)->nullable();
@@ -37,8 +32,11 @@ class CreateUsersTable extends Migration
             $table->string('address_neighborhood', 100)->nullable();
             $table->string('address_city', 100)->nullable();
             $table->string('address_state', 60)->nullable();
-            $table->boolean('is_admin')->default(false);
-            $table->rememberToken();
+            $table->string('site', 191)->nullalble();
+            $table->string('path_logo', 191)->nullable();
+            $table->longText('cfg_txt_sale', 191)->nullable();
+            $table->longText('cfg_txt_service', 191)->nullable();
+            $table->integer('cfg_records_per_page')->default(10);
             $table->timestamps();
         });
     }
@@ -50,7 +48,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('person_types');
+        Schema::dropIfExists('companies');
     }
 }
