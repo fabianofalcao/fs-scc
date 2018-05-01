@@ -176,8 +176,8 @@ return [
             'icon' => 'users',
             'submenu' => [
                 [
-                    'text' => 'Sistema',
-                    'url'  => 'admin/settings/sistem',
+                    'text' => 'Empresas',
+                    'url'  => 'admin/company',
                     'icon' => 'circle-o',
                 ],
                 [

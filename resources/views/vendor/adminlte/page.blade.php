@@ -135,4 +135,5 @@
     @stack('js')
     @yield('js')
     @stack('scripts-user')
+    @stack('scripts-company')
 @stop

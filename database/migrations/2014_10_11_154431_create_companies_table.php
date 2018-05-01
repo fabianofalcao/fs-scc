@@ -21,8 +21,6 @@ class CreateCompaniesTable extends Migration
             $table->string('im', 20)->nullable();
             $table->string('responsible_name', 100)->nullable();
             $table->string('email', 191)->unique();
-            $table->string('password', 191);
-            $table->string('image', 191)->nullable();
             $table->string('phone', 12)->nullable();
             $table->string('cell', 12)->nullable();
             $table->string('address_zipcode', 8)->nullable();
@@ -32,7 +30,7 @@ class CreateCompaniesTable extends Migration
             $table->string('address_neighborhood', 100)->nullable();
             $table->string('address_city', 100)->nullable();
             $table->string('address_state', 60)->nullable();
-            $table->string('site', 191)->nullalble();
+            $table->string('site', 191)->nullable();
             $table->string('path_logo', 191)->nullable();
             $table->longText('cfg_txt_sale', 191)->nullable();
             $table->longText('cfg_txt_service', 191)->nullable();

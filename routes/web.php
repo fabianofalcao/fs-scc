@@ -14,6 +14,9 @@ $this->group(['middleware' => ['auth'], 'namespace' => 'Admin', 'prefix' => 'adm
     $this->any('user/search', 'UserController@search')->name('user.search');
     $this->resource('user', 'UserController');
 
+    $this->any('company/search', 'UserCompany@search')->name('company.search');
+    $this->resource('company', 'CompanyController');
+
 });
    
 
