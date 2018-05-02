@@ -96,7 +96,7 @@ class User extends Authenticatable
         }
     }
 
-    public function updateUser($request, $id, $person_physical)
+    public function updateUser($request, $id)
     {
         $dataForm = $request->all();
         $dataForm['cpf'] = preg_replace('/[^0-9]/', '', $dataForm['cpf']);

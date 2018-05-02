@@ -181,9 +181,25 @@ return [
                     'icon' => 'circle-o',
                 ],
                 [
-                    'text' => 'Usuários',
-                    'url'  => 'admin/user',
-                    'icon' => 'circle-o',
+                    'text'  => 'Usuários e permissões',
+                    'icon'  => 'circle-o',
+                    'submenu' => [
+                        [
+                            'text' => 'Grupos',
+                            'url'  => 'admin/role',
+                            'icon' => 'circle-o',
+                        ],
+                        [
+                            'text' => 'Pemissões',
+                            'url'  => 'admin/permission',
+                            'icon' => 'circle-o',
+                        ],
+                        [
+                            'text' => 'Usuários',
+                            'url'  => 'admin/user',
+                            'icon' => 'circle-o',
+                        ],
+                    ],
                 ],
                 [
                     'text'  => 'Cadastros auxiliares',

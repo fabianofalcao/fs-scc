@@ -3,7 +3,6 @@
 use Illuminate\Database\Seeder;
 use App\Models\Person_type;
 use App\User;
-use Faker\Provider\fr_BE\Person;
 
 class UsersTableSeeder extends Seeder
 {
@@ -14,14 +13,14 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        Person_type::create([
+        $pt1 = Person_type::firstOrCreate([
             'description' => 'Pessoa física',
         ]);
-        Person_type::create([
+        $pt2 = Person_type::firstOrCreate([
             'description' => 'Pessoa jurídica',
         ]);
 
-        User::create([
+        $u1 = User::firstOrCreate([
             'person_type_id' => 1,
             'name' => 'Administrador do sistema',
             'email' => 'admin@admin.com',

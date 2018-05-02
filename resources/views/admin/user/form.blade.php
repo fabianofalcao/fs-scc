@@ -84,15 +84,31 @@
             </div>
         </div>
     </div>
+    
     <div class="row">
-        <div class="col-lg-12">
-            <div class="checkbox form-group">
-                <label>
-                    <input type="checkbox" name="is_admin" value="1"> É administrador?
-                </label>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label>Grupos do usuário: </label>
+                    <div class = "panel panel-default">
+                        <div class = "panel-body">
+                            <div class="row">
+                                @forelse($roles as $role)
+                                    <div class="col-md-4">
+                                        <label class="checkbox-inline text-center">
+                                            <input type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->id }}"> {{ $role->name }}
+                                        </label>
+                                    </div>
+                                @empty
+                                    <p class="text-center">Não existem grupos de usuários cadastrados!</p>
+                                @endforelse
+                            </div>
+                        </div>
+                     </div>                               
+                </div>
             </div>
         </div>
-    </div>
+
+
 </fildset>
 
 <fieldset style="margin-top: 10px;">

@@ -41,9 +41,11 @@
                             @if(isset($dataForm))
                                 <th>Nome / Razão social</th>
                                 <th>E-mail</th>
+                                <th>Grupos</th>
                             @else
                                 <th><a href="{{Order::url('name')}}">Nome / Razão social</a></th>
                                 <th><a href="{{Order::url('email')}}">E-mail</a></th>
+                                <th>Grupos de usuário</th>
                             @endif
                                 <th class="text-center">Ações</th>
                             </tr>
@@ -53,6 +55,13 @@
                                 <tr>
                                     <td>{{ $user->name }}</th>
                                     <td>{{ $user->email }}</th>
+                                    <td>
+                                        @forelse($user->roles as $role)
+                                        {{ $role->name }}
+                                        @empty
+                                        Nenhum
+                                        @endforelse
+                                    </td>
                                     <td class="text-center">
                                         <a href="{{ route('user.show', $user->id) }}" class="btn bg-purple btn-xs" title="Detalhar registro"><i class="fa fa-info-circle" aria-hidden="true"></i> Detalhar</a>
                                         <a href="{{ route('user.edit', $user->id) }}" class="btn btn-primary btn-xs" title="Editar registro"><i class="fa fa-pencil-square" aria-hidden="true"></i> Editar</a>

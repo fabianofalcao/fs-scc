@@ -5,18 +5,21 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Role;
 use App\Http\Requests\UserStoreUpdateFormRequest;
 
 class UserController extends Controller
 {
     private $user;
+    private $role;
     private $totalPage = 10;
     private $get;
 
-    public function __construct(Request $request, User $user)
+    public function __construct(Request $request, User $user, Role $role)
     {
         $this->user = $user;
         $this->get = $request;
+        $this->role = $role;
     }
     
     /**
@@ -28,7 +31,7 @@ class UserController extends Controller
     {
         $order = $this->get->get('order', 'ASC');
         $by = $this->get->get('by', 'name');
-        $users = $this->user->orderBy($by, $order)->paginate($this->totalPage);
+        $users = $this->user->with('roles')->orderBy($by, $order)->paginate($this->totalPage);
         return view('admin.user.index', compact('users'));
     }
 
@@ -41,7 +44,8 @@ class UserController extends Controller
     {
         
         $sexos = ['' => 'Selecione o sexo', 'Feminino' => 'Feminino', 'Masculino' => 'Masculino'];
-        return view('admin.user.create', compact('sexos', 'user'));
+        $roles = $this->role->orderBy('name', 'ASC')->get();
+        return view('admin.user.create', compact('sexos', 'user', 'roles'));
     }
 
     /**
@@ -82,11 +86,12 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = $this->user->with(['person_physical', 'person_type'])->find($id);
+        $user = $this->user->with(['person_physical', 'person_type', 'roles'])->find($id);
         $sexos = ['' => 'Selecione o sexo', 'Feminino' => 'Feminino', 'Masculino' => 'Masculino'];
+        $roles = $this->role->orderBy('name', 'ASC')->get();
         if(!$user)        
             return redirect()->back();
-        return view('admin.user.edit', compact('user', 'sexos'));
+        return view('admin.user.edit', compact('user', 'sexos', 'roles'));
         
     }
 
