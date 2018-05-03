@@ -29,7 +29,7 @@ class PermissionsTableSeeder extends Seeder
 
         $p4 = Permission::firstOrCreate([
             'name' => 'user-delete',
-            'description' => 'Acesso a excluir de usuários',
+            'description' => 'Acesso a excluir usuários',
         ]);
 
 
@@ -75,6 +75,5 @@ class PermissionsTableSeeder extends Seeder
             'name' => 'company-delete',
             'description' => 'Acesso a excluir companhias.',
         ]);
-
     }
 }

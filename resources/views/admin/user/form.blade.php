@@ -95,7 +95,7 @@
                                 @forelse($roles as $role)
                                     <div class="col-md-4">
                                         <label class="checkbox-inline text-center">
-                                            <input type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->id }}"> {{ $role->name }}
+                                            <input type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->id }}" @if(in_array($role->id, $role_user)) checked @endif> {{ $role->name }}
                                         </label>
                                     </div>
                                 @empty

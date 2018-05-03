@@ -89,9 +89,13 @@ class UserController extends Controller
         $user = $this->user->with(['person_physical', 'person_type', 'roles'])->find($id);
         $sexos = ['' => 'Selecione o sexo', 'Feminino' => 'Feminino', 'Masculino' => 'Masculino'];
         $roles = $this->role->orderBy('name', 'ASC')->get();
+        $role_user = [];
+        foreach($user->roles as $role){
+            array_push($role_user,$role->id);
+        }
         if(!$user)        
             return redirect()->back();
-        return view('admin.user.edit', compact('user', 'sexos', 'roles'));
+        return view('admin.user.edit', compact('user', 'sexos', 'roles', 'role_user'));
         
     }
 

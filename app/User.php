@@ -52,6 +52,7 @@ class User extends Authenticatable
     public function newUser($request)
     {
         $dataForm = $request->all();
+        $idRoles = $request->roles;
         $dataForm['cpf'] = preg_replace('/[^0-9]/', '', $dataForm['cpf']);
         $dataForm['phone'] = preg_replace('/[^0-9]/', '', $dataForm['phone']);
         $dataForm['cell'] = preg_replace('/[^0-9]/', '', $dataForm['cell']);
@@ -86,12 +87,20 @@ class User extends Authenticatable
         $dataForm['date_birth'] = formatDateAndTime(str_replace('/', '-', $dataForm['date_birth']), "Y-m-d");
         $person_physical = Person_physical::create($dataForm);
 
+        //Cadastro na tabela role_user
+        if($idRoles){
+            foreach($idRoles as $idRole){
+                $role = Role::find($idRole);
+                $this->roles()->attach($role);
+            }
+        }
+
         // Verifico se tudo ocorreu bem e dou commit ou rollback
         if($newUser && $person_physical){
             DB::commit();
             return $newUser;
         } else {
-            DB::roolback();
+            DB::rollback();
             return false;
         }
     }
@@ -99,6 +108,8 @@ class User extends Authenticatable
     public function updateUser($request, $id)
     {
         $dataForm = $request->all();
+        $idRoles = $request->roles;
+        //dd($idRoles);
         $dataForm['cpf'] = preg_replace('/[^0-9]/', '', $dataForm['cpf']);
         $dataForm['phone'] = preg_replace('/[^0-9]/', '', $dataForm['phone']);
         $dataForm['cell'] = preg_replace('/[^0-9]/', '', $dataForm['cell']);
@@ -108,8 +119,16 @@ class User extends Authenticatable
         //Inicio a transação
         DB::beginTransaction();
 
-        // Atualizo os dados da tabela pessoa física
+        //Atualizo a tabela role_user
+        DB::delete('DELETE FROM role_user where user_id = ?', [$id]);
+        if($idRoles){
+            foreach($idRoles as $idRole){
+                $role = Role::find($idRole);
+                $this->roles()->attach($role);
+            }
+        }   
 
+        // Atualizo os dados da tabela pessoa física
         $dataForm['user_id'] = $id;
         $dataForm['date_birth'] = formatDateAndTime(str_replace('/', '-', $dataForm['date_birth']), "Y-m-d");
         $updPersonPhysical = $this->person_physical->update($dataForm);
