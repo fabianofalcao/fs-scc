@@ -39,7 +39,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view('admin.company.create', compact('company'));
+        return view('admin.company.create');
     }
 
     /**

@@ -8,7 +8,7 @@
     <div class="col-lg-12">
         <div class="form-group">
             <label for="name">Nome / Razão Social</label>
-            {!! Form::text('name', null, ['class' => 'form-control input-sm', 'autofocus', 'required']) !!}
+            {!! Form::text('name', null, ['class' => 'form-control input-sm', 'required']) !!}
         </div>
     </div>
 </div>
