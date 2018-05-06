@@ -223,6 +223,7 @@ return [
                     ],
                 ],
             ],
+            'can'  => 'user-create',
         ],
         /*[
             'text' => 'Change Password',

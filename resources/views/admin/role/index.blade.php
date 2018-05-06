@@ -49,7 +49,7 @@
                                     <td class="text-center">
                                         {!! Form::open(['route' => ['role.destroy', $role->id], 'method' => 'DELETE']) !!}
                                         <a href="{{ route('role.edit', $role->id) }}" class="btn btn-primary btn-xs" title="Editar registro"><i class="fa fa-pencil-square" aria-hidden="true"></i> Editar</a>
-                                        <a href="{{ route('roles.permission', $role->id) }}" class="btn bg-purple btn-xs" title="Permissões do usuário"><i class="fa fa-lock" aria-hidden="true"></i>  Permissões</a>
+                                        <a href="{{ route('role.permission', $role->id) }}" class="btn bg-purple btn-xs" title="Permissões do usuário"><i class="fa fa-lock" aria-hidden="true"></i>  Permissões</a>
                                         <button type="submit" class="btn btn-danger btn-xs" title="Excluir registro" onclick="javascript: return confirm('Tem certeza que deseja excluir registro?.');">
                                             <i class="fa fa-trash-o" aria-hidden="true"></i> Excluir
                                         </button>

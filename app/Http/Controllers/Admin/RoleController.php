@@ -128,15 +128,14 @@ class RoleController extends Controller
         return view('admin.role.permission', compact('role', 'permissions', 'permission_role'));
     }
 
-    public function permissionsStore(Request $request, $id)
+    public function permissionsStoreUpdate(Request $request, $role_id)
     {
-        $role = $this->role->find($id);
-        $dataForm = $request->all();
-        $permission = Permission::find($dataForm['permission_id']);
-        if ($role->newPermission($permission))
-            return redirect()->route('role.permission')->with('success', 'Registro incluído com sucesso!');
+        $role = $this->role->find($role_id);
+        $permissions_id = $request->permissions;
+        if ($role->newPermission($permissions_id, $role->id))
+            return redirect()->route('role.permission', $role->id)->with('success', 'Permissões atualizadas com sucesso!');
         else
-            return redirect()->back()->with('error', 'Erro ao incluir registro.');
+            return redirect()->back()->with('error', 'Erro ao atualizar permissões.');
     }
 
     public function permissionsDestroy($id, $permission_id)

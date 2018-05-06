@@ -174,4 +174,16 @@ class User extends Authenticatable
                     ->orwhere('email', 'LIKE', "%{$keySearch}%")
                     ->paginate($totalPage);
     }
+
+    public function hasRole($roles)
+    {   
+        //dd($roles);
+        
+        if($roles){            
+            $userRoles = $this->roles;
+            //dd($roles, $userRoles);
+            //dd($roles->intersect($userRoles)->count());
+            return $roles->intersect($userRoles)->count();
+        } 
+    }
 }

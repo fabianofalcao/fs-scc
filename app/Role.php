@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Role extends Model
 {
@@ -20,28 +21,24 @@ class Role extends Model
         return $this->belongsToMany(Permission::class);
     }
 
-    public function newPermission($permission)
+    public function newPermission($permissions_id, $role_id)
     {
-        if(is_string($permission))
-            $permission = Permission::where('name', '=', $permission)->firstOrFail();
+        //dd($permissions_id, $role_id);
         
-        if($this->permissionExists($permission))
-            return false;
-        
-        return $this->permissions()->attach($permission);
-    }
+        //Inicio a transação
+        DB::beginTransaction();
 
-    public function delPermission($permission)
-    {
-        if(is_string($permission))
-            $permission = Permission::where('name', '=', $permission)->firstOrFail();
-        return $this->permissions()->detach($permission);   
+        //Atualizo a tabela permission_role
+        DB::delete('DELETE FROM permission_role where role_id = ?', [$role_id]);
+        if($permissions_id){
+            foreach($permissions_id as $idPermission){
+                $permission = Permission::find($idPermission);
+                $this->permissions()->attach($permission);
+            }
+         }
+        // Verifico se tudo ocorreu bem e dou commit ou rollback
+        DB::commit();
+        return true;
     }
-
-    public function permissionExists($permission)
-    {
-        if(is_string($permission))
-            $permission = Permission::where('name', '=', $permission)->firstOrFail();
-        return (boolean) $this->permissions()->find($permission->id);
-    }
+   
 }

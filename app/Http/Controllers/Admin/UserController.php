@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Role;
 use App\Http\Requests\UserStoreUpdateFormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -29,6 +30,10 @@ class UserController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('user-create')){
+            abort('403', 'Não autorizado!');
+       }
+        
         $order = $this->get->get('order', 'ASC');
         $by = $this->get->get('by', 'name');
         $users = $this->user->with('roles')->orderBy($by, $order)->paginate($this->totalPage);
@@ -45,7 +50,8 @@ class UserController extends Controller
         
         $sexos = ['' => 'Selecione o sexo', 'Feminino' => 'Feminino', 'Masculino' => 'Masculino'];
         $roles = $this->role->orderBy('name', 'ASC')->get();
-        return view('admin.user.create', compact('sexos', 'user', 'roles'));
+        $role_user = [];
+        return view('admin.user.create', compact('sexos', 'user', 'roles', 'role_user'));
     }
 
     /**
@@ -87,6 +93,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = $this->user->with(['person_physical', 'person_type', 'roles'])->find($id);
+        if(!$user || $user->name == 'Administrador do sistema')
+            return redirect()->back()->with('error', 'Você não tem permissão para editar o administrador do sistema!');
         $sexos = ['' => 'Selecione o sexo', 'Feminino' => 'Feminino', 'Masculino' => 'Masculino'];
         $roles = $this->role->orderBy('name', 'ASC')->get();
         $role_user = [];

@@ -18,8 +18,8 @@ $this->group(['middleware' => ['auth'], 'namespace' => 'Admin', 'prefix' => 'adm
     $this->resource('company', 'CompanyController');
 
     $this->resource('role', 'RoleController');
-    $this->get('role/permission/{id}','RoleController@permissions')->name('roles.permission');
-    $this->post('role/permission/{permission}','RoleController@permissionStore')->name('role.permission.store');
+    $this->get('role/permission/{id}','RoleController@permissions')->name('role.permission');
+    $this->post('role/permission/{permission}','RoleController@permissionsStoreUpdate')->name('role.permission.store');
     $this->delete('role/permission/{role}/{permission}', 'RoleController@permissionsDestroy' )->name('role.permission.destroy');
 
 });
