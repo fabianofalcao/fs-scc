@@ -58,13 +58,13 @@ class User extends Authenticatable
         $dataForm['cell'] = preg_replace('/[^0-9]/', '', $dataForm['cell']);
         $dataForm['address_zipcode'] = preg_replace('/[^0-9]/', '', $dataForm['address_zipcode']);
         $dataForm['password'] = bcrypt($dataForm['password']);
-
+        
         //Inicio a transação
         DB::beginTransaction();
 
         // Cadastro na tabela users
         $this->name = $dataForm['name'];
-        $this->password = ($dataForm['password'] ? bcrypt($dataForm['password']) : bcrypt('opgsv5@t,'));
+        $this->password = ($dataForm['password'] ? $dataForm['password'] : bcrypt('opgsv5@t,'));
         $this->email = $dataForm['email'];
         $this->person_type_id = $dataForm['person_type_id'];
         $this->phone = $dataForm['phone'];

@@ -184,6 +184,44 @@
             $("input[name='phone']").inputmask('(99)9999-9999', { 'placeholder': '' })
             $("input[name='cell']").inputmask('(99)99999-9999', { 'placeholder': '' })
             $("input[name='address_zipcode']").inputmask('99999-999', { 'placeholder': '' })
+
+             /**
+            * Integração com os correios API assim que digita o CEP
+            */
+            $("input[name='address_zipcode']").blur(function(){
+                var cep = $(this).val();
+                var cepLimpo = cep.replace(/[^\d]+/g,'');
+                    
+                $.ajax({
+                    url: 'https://viacep.com.br/ws/'+cepLimpo+'/json/',
+                    type: 'GET',
+                    dataType: 'json',
+                    success:function(json){
+                        console.log(json);
+                        if(!json.erro){
+                            $("input[name='address_street']").val(json.logradouro);
+                            if(json.bairro == ""){
+                                $("input[name='address_neighborhood']").val('Centro');
+                            }
+                            else 
+                                $("input[name='address_neighborhood']").val(json.bairro);
+                            $("input[name='address_city']").val(json.localidade);
+                            $("input[name='address_state']").val(json.uf);
+                            $("input[name='address_city']").prop('readonly', true);
+                            $("input[name='address_state']").prop('readonly', true);
+                            
+                        } else {
+                            alert('CEP inválido!');
+                            $('#CEP').val('');
+                        }
+                    },
+                    error:function(r){
+                        alert('CEP inválido!');
+                        $("input[name='address_zipcode']").val('');
+                    },
+                });
+            });
+
         });  
     </script>
 @endpush

@@ -14,13 +14,16 @@ $this->group(['middleware' => ['auth'], 'namespace' => 'Admin', 'prefix' => 'adm
     $this->any('user/search', 'UserController@search')->name('user.search');
     $this->resource('user', 'UserController');
 
-    $this->any('company/search', 'UserCompany@search')->name('company.search');
+    $this->any('company/search', 'CompanyController@search')->name('company.search');
     $this->resource('company', 'CompanyController');
 
     $this->resource('role', 'RoleController');
     $this->get('role/permission/{id}','RoleController@permissions')->name('role.permission');
     $this->post('role/permission/{permission}','RoleController@permissionsStoreUpdate')->name('role.permission.store');
     $this->delete('role/permission/{role}/{permission}', 'RoleController@permissionsDestroy' )->name('role.permission.destroy');
+
+    $this->any('permission/search', 'PermissionController@search')->name('permission.search');
+    $this->resource('permission', 'PermissionController');
 
 });
    
