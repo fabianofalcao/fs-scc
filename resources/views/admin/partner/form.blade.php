@@ -1,52 +1,80 @@
-{!! Form::hidden('person_type_id', 1 ) !!}
+{!! Form::hidden('person_type_id', 2 ) !!}
+{!! Form::hidden('roles[]', $role->id) !!}
 <fieldset>
-    <legend>Dados pessoais</legend>
+    <legend>Dados jurídicos</legend>
     <div class="row">
         <div class="col-lg-12">
             <div class="form-group">
-                <label for="name">Nome *</label>
-                {!! Form::text('name', null, ['class' => 'form-control input-sm', 'autofocus', 'required']) !!}
+                <label for="name">Razão Social *</label>
+                @if(isset($user))
+                {!! Form::text('name', $user->name, ['class' => 'form-control input-sm', 'required']) !!}
+                @else
+                {!! Form::text('name', null, ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-3">
             <div class="form-group">
-                <label for="cpf">CPF *</label>
+                <label for="cnpj">CNPJ *</label>
                 @if(isset($user))
-                {!! Form::text('cpf', $user->person_physical->cpf, ['class' => 'form-control input-sm', 'required']) !!}
+                {!! Form::text('cnpj', $user->person_legal->cnpj, ['class' => 'form-control input-sm', 'required']) !!}
                 @else
-                {!! Form::text('cpf', null, ['class' => 'form-control input-sm', 'required']) !!}
+                {!! Form::text('cnpj', null, ['class' => 'form-control input-sm', 'required']) !!}
                 @endif
             </div>
         </div>
         <div class="col-lg-3">
             <div class="form-group">
-                <label for="rg">Identidade</label>
+                <label for="ie">Insc.Estadual</label>
                 @if(isset($user))
-                {!! Form::text('rg', $user->person_physical->rg, ['class' => 'form-control input-sm']) !!}
+                {!! Form::text('ie', $user->person_legal->ie, ['class' => 'form-control input-sm']) !!}
                 @else
-                {!! Form::text('rg', null, ['class' => 'form-control input-sm']) !!}
+                {!! Form::text('ie', null, ['class' => 'form-control input-sm']) !!}
                 @endif
             </div>
         </div>
         <div class="col-lg-3">
             <div class="form-group">
-                <label for="date_birth">Data Nascimento *</label>
+                <label for="im">Insc. Municipal</label>
                 @if(isset($user))
-                {!! Form::text('date_birth', formatDateAndTime($user->person_physical->date_birth), ['class' => 'form-control input-sm', 'required']) !!}
+                {!! Form::text('im', $user->person_legal->im, ['class' => 'form-control input-sm']) !!}
                 @else
-                {!! Form::text('date_birth', null, ['class' => 'form-control input-sm', 'required']) !!}
+                {!! Form::text('im', null, ['class' => 'form-control input-sm']) !!}
                 @endif
             </div>
         </div>
+
         <div class="col-lg-3">
             <div class="form-group">
-                <label for="sexo">Sexo *</label>
+                <label for="status">Status *</label>
                 @if(isset($user))
-                {!! Form::select('sexo', $sexos, $user->person_physical->sexo, ['class' => 'form-control input-sm', 'required']) !!}
+                {!! Form::select('status', $statuses, $partner->status, ['class' => 'form-control input-sm', 'required']) !!}
                 @else
-                {!! Form::select('sexo', $sexos, null, ['class' => 'form-control input-sm', 'required']) !!}
+                {!! Form::select('status', $statuses, null, ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="form-group">
+                <label for="date_start">Data Convênio</label>
+                @if(isset($user))
+                {!! Form::text('date_start',$user->person_legal->responsible_name, ['class' => 'form-control input-sm']) !!}
+                @else
+                {!! Form::text('date_start', null, ['class' => 'form-control input-sm']) !!}
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-10">
+            <div class="form-group">
+                <label for="responsible_name">Contato</label>
+                @if(isset($user))
+                {!! Form::text('responsible_name',$user->person_legal->responsible_name, ['class' => 'form-control input-sm']) !!}
+                @else
+                {!! Form::text('responsible_name', null, ['class' => 'form-control input-sm']) !!}
                 @endif
             </div>
         </div>
@@ -58,7 +86,11 @@
         <div class="col-lg-12">
             <div class="form-group">
                 <label for="email">E-mail *</label>
+                @if(isset($user))
+                {!! Form::email('email', $user->email, ['class' => 'form-control input-sm', 'required']) !!}
+                @else
                 {!! Form::email('email', null, ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
             </div>
         </div>
     </div>
@@ -84,31 +116,6 @@
             </div>
         </div>
     </div>
-    
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="form-group">
-                <label>Grupos do usuário: </label>
-                <div class = "panel panel-default">
-                    <div class = "panel-body">
-                        <div class="row">
-                            @forelse($roles as $role)
-                                <div class="col-md-3">
-                                    <label class="checkbox-inline text-center">
-                                        <input type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->id }}" @if(in_array($role->id, $role_user)) checked @endif> {{ $role->name }}
-                                    </label>
-                                </div>
-                            @empty
-                                <p class="text-center">Não existem grupos de usuários cadastrados!</p>
-                            @endforelse
-                        </div>
-                    </div>
-                    </div>                               
-            </div>
-        </div>
-    </div>
-
-
 </fildset>
 
 <fieldset style="margin-top: 10px;">
@@ -117,25 +124,41 @@
         <div class="col-lg-2">
             <div class="form-group">
                 <label for="address_zipcode">CEP *</label>
+                @if(isset($user))
+                {!! Form::text('address_zipcode', $user->address_zipcode, ['class' => 'form-control input-sm', 'required']) !!}
+                @else
                 {!! Form::text('address_zipcode', null, ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
             </div>
         </div>
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="address_street">Logradouro</label>
+                @if(isset($user))
+                {!! Form::text('address_street', $user->address_street, ['class' => 'form-control input-sm', 'required']) !!}
+                @else
                 {!! Form::text('address_street', null, ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
             </div>
         </div>
         <div class="col-lg-1">
             <div class="form-group">
                 <label for="address_number">Número</label>
+                @if(isset($user))
+                {!! Form::text('address_number', $user->address_number, ['class' => 'form-control input-sm']) !!}
+                @else
                 {!! Form::text('address_number', null, ['class' => 'form-control input-sm']) !!}
+                @endif
             </div>
         </div>
         <div class="col-lg-3">
             <div class="form-group">
                 <label for="address_complement">Complemento</label>
+                @if(isset($user))
+                {!! Form::text('address_complement', $user->address_complement, ['class' => 'form-control input-sm']) !!}
+                @else
                 {!! Form::text('address_complement', null, ['class' => 'form-control input-sm']) !!}
+                @endif
             </div>
         </div>
     </div>
@@ -143,19 +166,31 @@
         <div class="col-lg-4">
             <div class="form-group">
                 <label for="address_neighborhood">Bairro</label>
+                @if(isset($user))
+                {!! Form::text('address_neighborhood', $user->address_neighborhood, ['class' => 'form-control input-sm']) !!}
+                @else
                 {!! Form::text('address_neighborhood', null, ['class' => 'form-control input-sm']) !!}
+                @endif
             </div>
         </div>
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="address_city">Cidade *</label>
+                @if(isset($user))
+                {!! Form::text('address_city', $user->address_city, ['class' => 'form-control input-sm', 'required']) !!}
+                @else
                 {!! Form::text('address_city', null, ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
             </div>
         </div>
         <div class="col-lg-2">
             <div class="form-group">
                 <label for="address_state">Estado *</label>
+                @if(isset($user))
+                {!! Form::text('address_state', $user->address_state, ['class' => 'form-control input-sm', 'required', 'maxlenght' => 2]) !!}
+                @else
                 {!! Form::text('address_state', null, ['class' => 'form-control input-sm', 'required', 'maxlenght' => 2]) !!}
+                @endif
             </div>
         </div>
     </div>
@@ -163,13 +198,29 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="phone">Telefone fixo</label>
+                @if(isset($user))
+                {!! Form::text('phone', $user->phone, ['class' => 'form-control input-sm']) !!}
+                @else
                 {!! Form::text('phone', null, ['class' => 'form-control input-sm']) !!}
+                @endif
             </div>
         </div>
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="cell">Celular</label>
+                @if(isset($user))
+                {!! Form::text('cell', $user->cell, ['class' => 'form-control input-sm',]) !!}
+                @else
                 {!! Form::text('cell', null, ['class' => 'form-control input-sm',]) !!}
+                @endif
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label for="comments">Observações</label>
+                {!! Form::textarea('comments', null, ['class' => 'form-control input-sm']) !!}
             </div>
         </div>
     </div>
@@ -179,8 +230,8 @@
     <script src="{{ url('assets/js/input-mask/jquery.inputmask.js') }}"></script>
     <script>
         $(document).ready(function ($) {
-            $("input[name='date_birth']").inputmask('99/99/9999', { 'placeholder': '' })
-            $("input[name='cpf']").inputmask('999.999.999-99', { 'placeholder': '' })
+            $("input[name='date_start']").inputmask('99/99/9999', { 'placeholder': '' })
+            $("input[name='cnpj']").inputmask('99.999.999/9999-99', { 'placeholder': '' })
             $("input[name='phone']").inputmask('(99)9999-9999', { 'placeholder': '' })
             $("input[name='cell']").inputmask('(99)99999-9999', { 'placeholder': '' })
             $("input[name='address_zipcode']").inputmask('99999-999', { 'placeholder': '' })

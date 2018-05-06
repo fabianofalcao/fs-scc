@@ -25,6 +25,9 @@ $this->group(['middleware' => ['auth'], 'namespace' => 'Admin', 'prefix' => 'adm
     $this->any('permission/search', 'PermissionController@search')->name('permission.search');
     $this->resource('permission', 'PermissionController');
 
+    $this->any('partner/search', 'PartnerController@search')->name('partner.search');
+    $this->resource('partner', 'PartnerController');
+
 });
    
 

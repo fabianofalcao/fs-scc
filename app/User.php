@@ -7,7 +7,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laraerp\Ordination\OrdinationTrait;
 use DB;
 use App\Models\Person_physical;
+use App\Models\Person_legal;
 use App\Models\Person_type;
+use App\Models\Partner;
 
 class User extends Authenticatable
 {
@@ -38,6 +40,11 @@ class User extends Authenticatable
         return $this->hasOne(Person_physical::class);
     }
 
+    public function person_legal()
+    {
+        return $this->hasOne(Person_legal::class);
+    }
+
     public function person_type()
     {
         return $this->belongsTo(Person_type::class);
@@ -48,12 +55,20 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class, 'id', 'user_id');
+    }
+
     
     public function newUser($request)
     {
         $dataForm = $request->all();
         $idRoles = $request->roles;
-        $dataForm['cpf'] = preg_replace('/[^0-9]/', '', $dataForm['cpf']);
+        if(isset($dataForm['cpf']))
+            $dataForm['cpf'] = preg_replace('/[^0-9]/', '', $dataForm['cpf']);
+        if(isset($dataForm['cnpj']))
+            $dataForm['cnpj'] = preg_replace('/[^0-9]/', '', $dataForm['cnpj']);
         $dataForm['phone'] = preg_replace('/[^0-9]/', '', $dataForm['phone']);
         $dataForm['cell'] = preg_replace('/[^0-9]/', '', $dataForm['cell']);
         $dataForm['address_zipcode'] = preg_replace('/[^0-9]/', '', $dataForm['address_zipcode']);
@@ -82,10 +97,17 @@ class User extends Authenticatable
             $this->is_admin = 0;
         $newUser = $this->save();
 
-        // Cadastro na tabela pessoa física
-        $dataForm['user_id'] = $this->id;
-        $dataForm['date_birth'] = formatDateAndTime(str_replace('/', '-', $dataForm['date_birth']), "Y-m-d");
-        $person_physical = Person_physical::create($dataForm);
+        //Verifico se é pessoa física ou juridica
+        if($this->person_type_id == 1){
+            // Cadastro na tabela pessoa física
+            $dataForm['user_id'] = $this->id;
+            $dataForm['date_birth'] = formatDateAndTime(str_replace('/', '-', $dataForm['date_birth']), "Y-m-d");
+            $person_physical = Person_physical::create($dataForm);
+        } else if($this->person_type_id == 2){
+            // Cadastro na tabela pessoa juridica
+            $dataForm['user_id'] = $this->id;
+            $person_legal = Person_legal::create($dataForm);
+        }
 
         //Cadastro na tabela role_user
         if($idRoles){
@@ -96,9 +118,9 @@ class User extends Authenticatable
         }
 
         // Verifico se tudo ocorreu bem e dou commit ou rollback
-        if($newUser && $person_physical){
+        if($newUser && (isset($person_physical) || isset($person_legal))){
             DB::commit();
-            return $newUser;
+            return $this;
         } else {
             DB::rollback();
             return false;
@@ -110,7 +132,10 @@ class User extends Authenticatable
         $dataForm = $request->all();
         $idRoles = $request->roles;
         //dd($idRoles);
-        $dataForm['cpf'] = preg_replace('/[^0-9]/', '', $dataForm['cpf']);
+        if(isset($dataForm['cpf']))
+            $dataForm['cpf'] = preg_replace('/[^0-9]/', '', $dataForm['cpf']);
+        if(isset($dataForm['cnpj']))
+            $dataForm['cnpj'] = preg_replace('/[^0-9]/', '', $dataForm['cnpj']);
         $dataForm['phone'] = preg_replace('/[^0-9]/', '', $dataForm['phone']);
         $dataForm['cell'] = preg_replace('/[^0-9]/', '', $dataForm['cell']);
         $dataForm['address_zipcode'] = preg_replace('/[^0-9]/', '', $dataForm['address_zipcode']);
@@ -128,10 +153,24 @@ class User extends Authenticatable
             }
         }   
 
+         //Verifico se é pessoa física ou juridica
+         if($this->person_type_id == 1){
+            // Cadastro na tabela pessoa física
+            $dataForm['user_id'] = $id;
+            $dataForm['date_birth'] = formatDateAndTime(str_replace('/', '-', $dataForm['date_birth']), "Y-m-d");
+            $person_physical = $this->person_physical->update($dataForm);
+        } else if($this->person_type_id == 2){
+            // Cadastro na tabela pessoa juridica
+            $dataForm['user_id'] = $id;
+            $person_legal = $this->person_legal->update($dataForm);
+        }
+
+        /*
         // Atualizo os dados da tabela pessoa física
         $dataForm['user_id'] = $id;
         $dataForm['date_birth'] = formatDateAndTime(str_replace('/', '-', $dataForm['date_birth']), "Y-m-d");
         $updPersonPhysical = $this->person_physical->update($dataForm);
+        */
         
         // Atualizo a tabela users
         $this->name = $dataForm['name'];
@@ -156,7 +195,7 @@ class User extends Authenticatable
         $updUser = $this->save();
 
         // Verifico se tudo ocorreu bem e dou commit ou rollback
-        if($updUser && $updPersonPhysical){
+        if($updUser){
             DB::commit();
             return $updUser;
         } else {

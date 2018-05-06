@@ -23,8 +23,13 @@ class RolesTableSeeder extends Seeder
         ]);
 
         $p3 = Role::firstOrCreate([
-            'name' => 'Usuario',
-            'description' => 'Acesso ao site como usuário.',
+            'name' => 'Associado',
+            'description' => 'Acesso ao site como associado.',
+        ]);
+
+        $p4 = Role::firstOrCreate([
+            'name' => 'Parceiro',
+            'description' => 'Acesso ao site como parceiro.',
         ]);
     }
 }
