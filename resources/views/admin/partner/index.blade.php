@@ -78,7 +78,7 @@
                     
                 </div><!-- /.box-body -->
                 <div class="box-footer text-right">
-                    <a href="{{ route('partner.index') }}" class="btn btn-default btn-sm" title="Voltar"><i class="fa fa-undo" aria-hidden="true"></i>  Voltar</a>
+                    <a href="{{ route('admin.index') }}" class="btn btn-default btn-sm" title="Voltar"><i class="fa fa-undo" aria-hidden="true"></i>  Voltar</a>
                 </div>
             </div><!-- /.box -->
         </div><!-- /.col -->
