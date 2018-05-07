@@ -31,6 +31,7 @@ class PartnerController extends Controller
         $order = $this->get->get('order', 'ASC');
         $by = $this->get->get('by', 'name');
         $partners = $this->user->where('person_type_id', '=', 2)->with(['partner', 'person_legal'])->orderBy($by, $order)->paginate($this->totalPage);
+        //dd($partners[0]->person_legal->cnpj);
         return view('admin.partner.index', compact('partners'));
     }
 
@@ -79,7 +80,11 @@ class PartnerController extends Controller
      */
     public function edit($id)
     {
-        //
+        $partner = $this->partner->with(['user', 'person_legal'])->find($id);
+        if(!$partner)
+            return redirect()->back();
+        $statuses = ['' => 'Selecione o status', 'Ativo' => 'Ativo', 'Inativo' => 'Inativo', 'Suspenso' => 'Suspenso', 'Outro' => 'Outro'];
+        return view('admin.partner.edit', compact('partner', 'statuses'));
     }
 
     /**
@@ -91,7 +96,11 @@ class PartnerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $partner = $this->partner->with(['person_legal', 'user'])->find($id);
+        if($partner->updPartner($request, $id))
+            return redirect()->route('partner.index')->with('success', 'Cadastro atualizado com sucesso!');
+        else
+            return redirect()->back()->with('error', 'Falha ao atualizar.');
     }
 
     /**

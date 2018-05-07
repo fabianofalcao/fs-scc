@@ -36,7 +36,7 @@ class UserController extends Controller
         
         $order = $this->get->get('order', 'ASC');
         $by = $this->get->get('by', 'name');
-        $users = $this->user->with('roles')->orderBy($by, $order)->paginate($this->totalPage);
+        $users = $this->user->where('person_type_id', '=', 1)->with('roles')->orderBy($by, $order)->paginate($this->totalPage);
         return view('admin.user.index', compact('users'));
     }
 

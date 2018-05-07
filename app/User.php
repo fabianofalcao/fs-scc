@@ -57,7 +57,7 @@ class User extends Authenticatable
 
     public function partner()
     {
-        return $this->belongsTo(Partner::class, 'id', 'user_id');
+        return $this->hasOne(Partner::class);
     }
 
     
@@ -140,28 +140,26 @@ class User extends Authenticatable
         $dataForm['cell'] = preg_replace('/[^0-9]/', '', $dataForm['cell']);
         $dataForm['address_zipcode'] = preg_replace('/[^0-9]/', '', $dataForm['address_zipcode']);
         $dataForm['password'] = bcrypt($dataForm['password']);
-
+        
         //Inicio a transação
         DB::beginTransaction();
 
-        //Atualizo a tabela role_user
-        DB::delete('DELETE FROM role_user where user_id = ?', [$id]);
+         //Caso existam roles enviadas atualizo a tabela role_user
         if($idRoles){
+            DB::delete('DELETE FROM role_user where user_id = ?', [$id]);
             foreach($idRoles as $idRole){
                 $role = Role::find($idRole);
                 $this->roles()->attach($role);
             }
         }   
 
-         //Verifico se é pessoa física ou juridica
-         if($this->person_type_id == 1){
+        //Verifico se é pessoa física ou juridica
+        if($this->person_type_id == 1){
             // Cadastro na tabela pessoa física
-            $dataForm['user_id'] = $id;
             $dataForm['date_birth'] = formatDateAndTime(str_replace('/', '-', $dataForm['date_birth']), "Y-m-d");
             $person_physical = $this->person_physical->update($dataForm);
         } else if($this->person_type_id == 2){
             // Cadastro na tabela pessoa juridica
-            $dataForm['user_id'] = $id;
             $person_legal = $this->person_legal->update($dataForm);
         }
 

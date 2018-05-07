@@ -7,6 +7,7 @@ use Laraerp\Ordination\OrdinationTrait;
 use App\User;
 use App\Role;
 use App\Models\Person_legal;
+use DB;
 
 class Partner extends Model
 {
@@ -21,7 +22,7 @@ class Partner extends Model
 
     public function person_legal()
     {
-        return $this->belongsTo(Person_legal::class, 'user_id', 'user_id');
+        return $this->hasOne(Person_legal::class, 'user_id', 'user_id');
     }
 
     public function newPartner($request, $user)
@@ -63,7 +64,36 @@ class Partner extends Model
             return $partner;
 
         }
+    }
 
+
+    public function updPartner($request, $id){
+        
+        $dataForm = $request->all();
+        
+        //
+        //Inicio a transação
+        DB::beginTransaction();
+
+        //Atualizo os dados da tabela partners
+        $dataForm['date_start'] = formatDateAndTime(str_replace('/', '-', $dataForm['date_start']), "Y-m-d");
+        $partner = $this->update($dataForm);
+
+        // Atualizo o usuário, e a person
+        $user = $this->user;
+        $updUser = $user->updateUser($request, $id);
+
+        if($partner && $updUser){
+            DB::commit();
+            return true;
+        } else {
+            DB::rollback();
+            return false;
+        }
+        
+
+        //Atualizo os dados da tabela users
+        //$user = 
         
     }
 }

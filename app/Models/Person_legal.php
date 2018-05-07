@@ -9,7 +9,7 @@ use App\Partner;
 class Person_legal extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['user_id', 'cnpj', 'ie', 'im', 'rsponsible_name'];
+    protected $fillable = ['user_id', 'cnpj', 'ie', 'im', 'responsible_name'];
 
     public function user()
     {

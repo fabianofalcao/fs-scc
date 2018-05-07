@@ -1,13 +1,15 @@
 {!! Form::hidden('person_type_id', 2 ) !!}
+@if(isset($role))
 {!! Form::hidden('roles[]', $role->id) !!}
+@endif
 <fieldset>
     <legend>Dados jurídicos</legend>
     <div class="row">
         <div class="col-lg-12">
             <div class="form-group">
                 <label for="name">Razão Social *</label>
-                @if(isset($user))
-                {!! Form::text('name', $user->name, ['class' => 'form-control input-sm', 'required']) !!}
+                @if(isset($partner))
+                {!! Form::text('name', $partner->user->name, ['class' => 'form-control input-sm', 'required']) !!}
                 @else
                 {!! Form::text('name', null, ['class' => 'form-control input-sm', 'required']) !!}
                 @endif
@@ -18,8 +20,8 @@
         <div class="col-lg-3">
             <div class="form-group">
                 <label for="cnpj">CNPJ *</label>
-                @if(isset($user))
-                {!! Form::text('cnpj', $user->person_legal->cnpj, ['class' => 'form-control input-sm', 'required']) !!}
+                @if(isset($partner))
+                {!! Form::text('cnpj', $partner->person_legal->cnpj, ['class' => 'form-control input-sm', 'required', 'readonly']) !!}
                 @else
                 {!! Form::text('cnpj', null, ['class' => 'form-control input-sm', 'required']) !!}
                 @endif
@@ -28,8 +30,8 @@
         <div class="col-lg-3">
             <div class="form-group">
                 <label for="ie">Insc.Estadual</label>
-                @if(isset($user))
-                {!! Form::text('ie', $user->person_legal->ie, ['class' => 'form-control input-sm']) !!}
+                @if(isset($partner))
+                {!! Form::text('ie', $partner->person_legal->ie, ['class' => 'form-control input-sm']) !!}
                 @else
                 {!! Form::text('ie', null, ['class' => 'form-control input-sm']) !!}
                 @endif
@@ -38,8 +40,8 @@
         <div class="col-lg-3">
             <div class="form-group">
                 <label for="im">Insc. Municipal</label>
-                @if(isset($user))
-                {!! Form::text('im', $user->person_legal->im, ['class' => 'form-control input-sm']) !!}
+                @if(isset($partner))
+                {!! Form::text('im', $partner->person_legal->im, ['class' => 'form-control input-sm']) !!}
                 @else
                 {!! Form::text('im', null, ['class' => 'form-control input-sm']) !!}
                 @endif
@@ -49,7 +51,7 @@
         <div class="col-lg-3">
             <div class="form-group">
                 <label for="status">Status *</label>
-                @if(isset($user))
+                @if(isset($partner))
                 {!! Form::select('status', $statuses, $partner->status, ['class' => 'form-control input-sm', 'required']) !!}
                 @else
                 {!! Form::select('status', $statuses, null, ['class' => 'form-control input-sm', 'required']) !!}
@@ -61,8 +63,8 @@
         <div class="col-lg-2">
             <div class="form-group">
                 <label for="date_start">Data Convênio</label>
-                @if(isset($user))
-                {!! Form::text('date_start',$user->person_legal->responsible_name, ['class' => 'form-control input-sm']) !!}
+                @if(isset($partner))
+                {!! Form::text('date_start', formatDateAndTime($partner->date_start), ['class' => 'form-control input-sm']) !!}
                 @else
                 {!! Form::text('date_start', null, ['class' => 'form-control input-sm']) !!}
                 @endif
@@ -71,8 +73,8 @@
         <div class="col-lg-10">
             <div class="form-group">
                 <label for="responsible_name">Contato</label>
-                @if(isset($user))
-                {!! Form::text('responsible_name',$user->person_legal->responsible_name, ['class' => 'form-control input-sm']) !!}
+                @if(isset($partner))
+                {!! Form::text('responsible_name',$partner->person_legal->responsible_name, ['class' => 'form-control input-sm']) !!}
                 @else
                 {!! Form::text('responsible_name', null, ['class' => 'form-control input-sm']) !!}
                 @endif
@@ -86,8 +88,8 @@
         <div class="col-lg-12">
             <div class="form-group">
                 <label for="email">E-mail *</label>
-                @if(isset($user))
-                {!! Form::email('email', $user->email, ['class' => 'form-control input-sm', 'required']) !!}
+                @if(isset($partner))
+                {!! Form::email('email', $partner->user->email, ['class' => 'form-control input-sm', 'required']) !!}
                 @else
                 {!! Form::email('email', null, ['class' => 'form-control input-sm', 'required']) !!}
                 @endif
@@ -98,7 +100,7 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="password">Senha *</label>
-                @if(isset($user))
+                @if(isset($partner))
                 {!! Form::password('password', ['class' => 'form-control input-sm']) !!}
                 @else
                 {!! Form::password('password', ['class' => 'form-control input-sm', 'required']) !!}
@@ -108,7 +110,7 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="password_confirmation">Confirmar senha *</label>
-                @if(isset($user))
+                @if(isset($partner))
                 {!! Form::password('password_confirmation', ['class' => 'form-control input-sm']) !!}
                 @else
                 {!! Form::password('password_confirmation', ['class' => 'form-control input-sm', 'required']) !!}
@@ -124,8 +126,8 @@
         <div class="col-lg-2">
             <div class="form-group">
                 <label for="address_zipcode">CEP *</label>
-                @if(isset($user))
-                {!! Form::text('address_zipcode', $user->address_zipcode, ['class' => 'form-control input-sm', 'required']) !!}
+                @if(isset($partner))
+                {!! Form::text('address_zipcode', $partner->user->address_zipcode, ['class' => 'form-control input-sm', 'required']) !!}
                 @else
                 {!! Form::text('address_zipcode', null, ['class' => 'form-control input-sm', 'required']) !!}
                 @endif
@@ -134,8 +136,8 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="address_street">Logradouro</label>
-                @if(isset($user))
-                {!! Form::text('address_street', $user->address_street, ['class' => 'form-control input-sm', 'required']) !!}
+                @if(isset($partner))
+                {!! Form::text('address_street', $partner->user->address_street, ['class' => 'form-control input-sm', 'required']) !!}
                 @else
                 {!! Form::text('address_street', null, ['class' => 'form-control input-sm', 'required']) !!}
                 @endif
@@ -144,8 +146,8 @@
         <div class="col-lg-1">
             <div class="form-group">
                 <label for="address_number">Número</label>
-                @if(isset($user))
-                {!! Form::text('address_number', $user->address_number, ['class' => 'form-control input-sm']) !!}
+                @if(isset($partner))
+                {!! Form::text('address_number', $partner->user->address_number, ['class' => 'form-control input-sm']) !!}
                 @else
                 {!! Form::text('address_number', null, ['class' => 'form-control input-sm']) !!}
                 @endif
@@ -154,8 +156,8 @@
         <div class="col-lg-3">
             <div class="form-group">
                 <label for="address_complement">Complemento</label>
-                @if(isset($user))
-                {!! Form::text('address_complement', $user->address_complement, ['class' => 'form-control input-sm']) !!}
+                @if(isset($partner))
+                {!! Form::text('address_complement', $partner->user->address_complement, ['class' => 'form-control input-sm']) !!}
                 @else
                 {!! Form::text('address_complement', null, ['class' => 'form-control input-sm']) !!}
                 @endif
@@ -166,8 +168,8 @@
         <div class="col-lg-4">
             <div class="form-group">
                 <label for="address_neighborhood">Bairro</label>
-                @if(isset($user))
-                {!! Form::text('address_neighborhood', $user->address_neighborhood, ['class' => 'form-control input-sm']) !!}
+                @if(isset($partner))
+                {!! Form::text('address_neighborhood', $partner->user->address_neighborhood, ['class' => 'form-control input-sm']) !!}
                 @else
                 {!! Form::text('address_neighborhood', null, ['class' => 'form-control input-sm']) !!}
                 @endif
@@ -176,8 +178,8 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="address_city">Cidade *</label>
-                @if(isset($user))
-                {!! Form::text('address_city', $user->address_city, ['class' => 'form-control input-sm', 'required']) !!}
+                @if(isset($partner))
+                {!! Form::text('address_city', $partner->user->address_city, ['class' => 'form-control input-sm', 'required', 'readonly']) !!}
                 @else
                 {!! Form::text('address_city', null, ['class' => 'form-control input-sm', 'required']) !!}
                 @endif
@@ -186,8 +188,8 @@
         <div class="col-lg-2">
             <div class="form-group">
                 <label for="address_state">Estado *</label>
-                @if(isset($user))
-                {!! Form::text('address_state', $user->address_state, ['class' => 'form-control input-sm', 'required', 'maxlenght' => 2]) !!}
+                @if(isset($partner))
+                {!! Form::text('address_state', $partner->user->address_state, ['class' => 'form-control input-sm', 'required', 'maxlenght' => 2, 'readonly']) !!}
                 @else
                 {!! Form::text('address_state', null, ['class' => 'form-control input-sm', 'required', 'maxlenght' => 2]) !!}
                 @endif
@@ -198,8 +200,8 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="phone">Telefone fixo</label>
-                @if(isset($user))
-                {!! Form::text('phone', $user->phone, ['class' => 'form-control input-sm']) !!}
+                @if(isset($partner))
+                {!! Form::text('phone', $partner->user->phone, ['class' => 'form-control input-sm']) !!}
                 @else
                 {!! Form::text('phone', null, ['class' => 'form-control input-sm']) !!}
                 @endif
@@ -208,8 +210,8 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="cell">Celular</label>
-                @if(isset($user))
-                {!! Form::text('cell', $user->cell, ['class' => 'form-control input-sm',]) !!}
+                @if(isset($partner))
+                {!! Form::text('cell', $partner->user->cell, ['class' => 'form-control input-sm',]) !!}
                 @else
                 {!! Form::text('cell', null, ['class' => 'form-control input-sm',]) !!}
                 @endif
@@ -220,7 +222,11 @@
         <div class="col-lg-12">
             <div class="form-group">
                 <label for="comments">Observações</label>
+                @if(isset($partner))
+                {!! Form::textarea('comments', $partner->user->comments, ['class' => 'form-control input-sm']) !!}
+                @else
                 {!! Form::textarea('comments', null, ['class' => 'form-control input-sm']) !!}
+                @endif
             </div>
         </div>
     </div>
