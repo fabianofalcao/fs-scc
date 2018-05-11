@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Role;
 use App\Models\Partner;
+use App\Http\Requests\PartnerStoreUpdateFormRequest;
 
 class PartnerController extends Controller
 {
@@ -53,7 +54,7 @@ class PartnerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, User $user)
+    public function store(PartnerStoreUpdateFormRequest $request, User $user)
     {
         if($this->partner->newPartner($request, $user))
             return redirect()->route('partner.index')->with('success', 'Cadastro realizado com sucesso!');
@@ -69,7 +70,11 @@ class PartnerController extends Controller
      */
     public function show($id)
     {
-        //
+        $partner = $this->partner->with(['user', 'person_legal'])->find($id);
+        if(!$partner)
+            return redirect()->back();
+        
+        return view('admin.partner.show', compact('partner'));
     }
 
     /**
@@ -94,7 +99,7 @@ class PartnerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PartnerStoreUpdateFormRequest $request, $id)
     {
         $partner = $this->partner->with(['person_legal', 'user'])->find($id);
         if($partner->updPartner($request, $id))
@@ -111,6 +116,21 @@ class PartnerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $partner = $this->partner->find($id);
+        if(!$partner)
+            return redirect()->back()->with('error', 'Falha ao excluir.');
+        if($partner->delete())
+            return redirect()->route('partner.index')->with('success', 'Parceiro excluído com sucesso!');
+        else
+            return redirect()->back()->with('error', 'Falha ao excluir.');
+    }
+
+    public function search(Request $request)
+    {
+        $dataForm = $request->except('_token');
+        
+        $partners = $this->partner->search($request, $this->totalPage);
+        //dd($partners);
+        return view('admin.partner.search', compact('partners', 'dataForm'));
     }
 }

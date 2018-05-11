@@ -55,11 +55,11 @@
                                 <tr>
                                     <td>{{ $partner->name }}</td>
                                     <td>{{ $partner->email }}</td>
-                                    <td>{{ formatString('cnpj',$partner->person_legal->cnpj)}}</td>
+                                    <td>{{ formatString('cnpj',$partner->cnpj)}}</td>
                                     
                                     <td class="text-center">
-                                        <a href="{{ route('partner.show', $partner->partner->id) }}" class="btn bg-purple btn-xs" title="Detalhar registro"><i class="fa fa-info-circle" aria-hidden="true"></i> Detalhar</a>
-                                        <a href="{{ route('partner.edit', $partner->partner->id) }}" class="btn btn-primary btn-xs" title="Editar registro"><i class="fa fa-pencil-square" aria-hidden="true"></i> Editar</a>
+                                        <a href="{{ route('partner.show', $partner->id) }}" class="btn bg-purple btn-xs" title="Detalhar registro"><i class="fa fa-info-circle" aria-hidden="true"></i> Detalhar</a>
+                                        <a href="{{ route('partner.edit', $partner->id) }}" class="btn btn-primary btn-xs" title="Editar registro"><i class="fa fa-pencil-square" aria-hidden="true"></i> Editar</a>
                                     </td>
                                 </tr>                                
                             @empty

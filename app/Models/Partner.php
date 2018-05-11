@@ -90,10 +90,18 @@ class Partner extends Model
             DB::rollback();
             return false;
         }
+    }
+    
+    
+    public function search($request, $totalPage = 5)
+    {
         
-
-        //Atualizo os dados da tabela users
-        //$user = 
-        
+        $keySearch = $request->key_search;
+        return $this->join('users', 'users.id', '=', 'partners.user_id')
+                    ->join('person_legals', 'person_legals.user_id', '=', 'users.id')
+                    ->select('partners.*', 'users.name', 'users.email', 'person_legals.cnpj')
+                    ->where('users.name', 'LIKE', "%{$keySearch}%")
+                    ->orwhere('users.email', 'LIKE', "%{$keySearch}%")
+                    ->paginate($totalPage);
     }
 }
