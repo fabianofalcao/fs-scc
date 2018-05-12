@@ -10,6 +10,7 @@ use App\Models\Person_physical;
 use App\Models\Person_legal;
 use App\Models\Person_type;
 use App\Models\Partner;
+use App\Models\Associated;
 
 class User extends Authenticatable
 {
@@ -58,6 +59,11 @@ class User extends Authenticatable
     public function partner()
     {
         return $this->hasOne(Partner::class);
+    }
+
+    public function associated()
+    {
+        return $this->hasOne(Associated::class);
     }
 
     
