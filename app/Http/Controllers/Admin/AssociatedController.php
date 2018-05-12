@@ -43,7 +43,8 @@ class AssociatedController extends Controller
      */
     public function create()
     {
-        //
+        $sexos = ['' => 'Selecione o sexo', 'Feminino' => 'Feminino', 'Masculino' => 'Masculino'];
+        return view('admin.associated.create', compact('sexos'));
     }
 
     /**
