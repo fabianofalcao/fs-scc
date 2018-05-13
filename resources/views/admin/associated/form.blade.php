@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3">
+        <div class="col-lg-2">
             <div class="form-group">
                 <label for="cnpj">CPF *</label>
                 @if(isset($associated))
@@ -27,7 +27,7 @@
                 @endif
             </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-2">
             <div class="form-group">
                 <label for="rg">Indentidade</label>
                 @if(isset($associated))
@@ -37,7 +37,7 @@
                 @endif
             </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-2">
             <div class="form-group">
                 <label for="date_birth">Data Nascimento *</label>
                 @if(isset($associated))
@@ -58,15 +58,80 @@
                 @endif
             </div>
         </div>
+
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label for="marital_status_id">Estado civil *</label>
+                @if(isset($associated))
+                {!! Form::select('marital_status_id', $marital_statuses, $associated->marital_status_id, ['class' => 'form-control input-sm', 'required']) !!}
+                @else
+                {!! Form::select('marital_status_id', $marital_statuses, null, ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
+            </div>
+        </div>
     </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label for="bank_id">Banco *</label>
+                @if(isset($associated))
+                {!! Form::select('bank_id', $banks, $associated->bank_id, ['class' => 'form-control input-sm', 'required']) !!}
+                @else
+                {!! Form::select('bank_id', $banks, null, ['class' => 'form-control input-sm', 'required']) !!}
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label for="bank_type_account">Tipo de conta</label>
+                @if(isset($associated))
+                {!! Form::select('bank_type_account', $types_account, $associated->bank_type_account, ['class' => 'form-control input-sm']) !!}
+                @else
+                {!! Form::select('bank_type_account', $types_account, null, ['class' => 'form-control input-sm']) !!}
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label for="bank_branch">Agênica</label>
+                @if(isset($associated))
+                {!! Form::text('bank_branch', $associated->bank_branch, ['class' => 'form-control input-sm']) !!}
+                @else
+                {!! Form::text('bank_branch', null, ['class' => 'form-control input-sm']) !!}
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label for="bank_account">Conta</label>
+                @if(isset($associated))
+                {!! Form::text('bank_account', $associated->bank_account, ['class' => 'form-control input-sm']) !!}
+                @else
+                {!! Form::text('bank_account', null, ['class' => 'form-control input-sm']) !!}
+                @endif
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-lg-2">
             <div class="form-group">
-                <label for="admission_date">Data Admissão</label>
+                <label for="admission_date">Data Admissão IFMG</label>
                 @if(isset($associated))
                 {!! Form::text('admission_date', formatDateAndTime($associated->admission_date), ['class' => 'form-control input-sm']) !!}
                 @else
                 {!! Form::text('admission_date', null, ['class' => 'form-control input-sm']) !!}
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="form-group">
+                <label for="role">Cargo no IFMG</label>
+                @if(isset($associated))
+                {!! Form::text('role',$associated->role, ['class' => 'form-control input-sm']) !!}
+                @else
+                {!! Form::text('role', null, ['class' => 'form-control input-sm']) !!}
                 @endif
             </div>
         </div>
@@ -80,13 +145,36 @@
                 @endif
             </div>
         </div>
-        <div class="col-lg-8">
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
             <div class="form-group">
-                <label for="role">Cargo</label>
+                <label for="automatic_debit_code">Cód. déb. automático</label>
                 @if(isset($associated))
-                {!! Form::text('role',$associated->role, ['class' => 'form-control input-sm']) !!}
+                {!! Form::text('automatic_debit_code', $associated->automatic_debit_code, ['class' => 'form-control input-sm']) !!}
                 @else
-                {!! Form::text('role', null, ['class' => 'form-control input-sm']) !!}
+                {!! Form::text('automatic_debit_code', null, ['class' => 'form-control input-sm']) !!}
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label for="credit_limit">Limite de crédito</label>
+                @if(isset($associated))
+                {!! Form::text('credit_limit', $associated->credit_limit, ['class' => 'form-control input-sm']) !!}
+                @else
+                {!! Form::text('credit_limit', null, ['class' => 'form-control input-sm']) !!}
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label for="Status">Status *</label>
+                @if(isset($associated))
+                {!! Form::select('status', $statuses, $associated->marital_status_id, ['class' => 'form-control input-sm', 'required']) !!}
+                @else
+                {!! Form::select('status', $statuses, null, ['class' => 'form-control input-sm', 'required']) !!}
                 @endif
             </div>
         </div>
@@ -237,7 +325,8 @@
         $(document).ready(function ($) {
             $("input[name='affiliation_date']").inputmask('99/99/9999', { 'placeholder': '' })
             $("input[name='admission_date']").inputmask('99/99/9999', { 'placeholder': '' })
-            $("input[name='cpf']").inputmask('99.999.999/9999-99', { 'placeholder': '' })
+            $("input[name='date_birth']").inputmask('99/99/9999', { 'placeholder': '' })
+            $("input[name='cpf']").inputmask('999.999.999-99', { 'placeholder': '' })
             $("input[name='phone']").inputmask('(99)9999-9999', { 'placeholder': '' })
             $("input[name='cell']").inputmask('(99)99999-9999', { 'placeholder': '' })
             $("input[name='address_zipcode']").inputmask('99999-999', { 'placeholder': '' })

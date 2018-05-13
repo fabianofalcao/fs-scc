@@ -59,7 +59,7 @@
                                     
                                     <td class="text-center">
                                         <a href="{{ route('associated.show', $associated->id) }}" class="btn bg-purple btn-xs" title="Detalhar registro"><i class="fa fa-info-circle" aria-hidden="true"></i> Detalhar</a>
-                                        <a href="{{ route('associated.dependets', $associated->id) }}" class="btn bg-purple btn-xs" title="Ver dependentes"><i class="fa fa-info-circle" aria-hidden="true"></i> Dependentes</a>
+                                        <a href="{{ route('associated.show', $associated->id) }}" class="btn bg-purple btn-xs" title="Ver dependentes"><i class="fa fa-info-circle" aria-hidden="true"></i> Dependentes</a>
                                         <a href="{{ route('associated.edit', $associated->id) }}" class="btn btn-primary btn-xs" title="Editar registro"><i class="fa fa-pencil-square" aria-hidden="true"></i> Editar</a>
                                     </td>
                                 </tr>                                

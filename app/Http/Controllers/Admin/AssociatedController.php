@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Associated;
 use App\User;
+use App\Role;
 use App\Models\Dependent;
+use App\Models\Marital_status;
+use App\Models\Bank;
 
 class AssociatedController extends Controller
 {
@@ -44,7 +47,15 @@ class AssociatedController extends Controller
     public function create()
     {
         $sexos = ['' => 'Selecione o sexo', 'Feminino' => 'Feminino', 'Masculino' => 'Masculino'];
-        return view('admin.associated.create', compact('sexos'));
+        $marital_statuses = Marital_status::pluck('description', 'id');
+        $marital_statuses->prepend('Selecione o estado civil...', '');
+        $statuses = ['' => 'Selecione o status...', 'Ativo' => 'Ativo', 'Inativo' => 'Inativo', 'Suspenso' => 'Suspenso', 'Outro' => 'Outro'];
+        $banks = Bank::pluck('name', 'id');
+        $banks->prepend('Selecione o banco...', '');
+        $role = Role::where('name', '=', 'Associado')->get()->first();
+        $types_account = ['' => 'Selecione o tipo de conta', 'Conta corrente' => 'Conta corrente', 'Poupança' => 'Poupança', 'Outro' => 'Outro'];
+        
+        return view('admin.associated.create', compact('sexos', 'marital_statuses', 'statuses', 'banks', 'types_account', 'role'));
     }
 
     /**
@@ -53,9 +64,12 @@ class AssociatedController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, User $user)
     {
-        //
+        if($this->associated->newAssociated($request, $user))
+            return redirect()->route('associated.index')->with('success', 'Cadastro realizado com sucesso!');
+        else
+            return redirect()->back()->with('error', 'Falha ao cadastrar.');
     }
 
     /**

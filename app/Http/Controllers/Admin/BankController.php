@@ -125,9 +125,9 @@ class BankController extends Controller
 
         $keySearch = $request->key_search;
         $order = $this->get->get('order', 'ASC');
-        $by = $this->get->get('by', 'description');
+        $by = $this->get->get('by', 'name');
         $banks = $this->bank
-                    ->where('description', 'LIKE', "%{$keySearch}%")
+                    ->where('name', 'LIKE', "%{$keySearch}%")
                     ->orderBy($by, $order)
                     ->paginate($this->totalPage);
 
