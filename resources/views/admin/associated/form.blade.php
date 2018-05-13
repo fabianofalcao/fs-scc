@@ -172,7 +172,7 @@
             <div class="form-group">
                 <label for="Status">Status *</label>
                 @if(isset($associated))
-                {!! Form::select('status', $statuses, $associated->marital_status_id, ['class' => 'form-control input-sm', 'required']) !!}
+                {!! Form::select('status', $statuses, $associated->status, ['class' => 'form-control input-sm', 'required']) !!}
                 @else
                 {!! Form::select('status', $statuses, null, ['class' => 'form-control input-sm', 'required']) !!}
                 @endif

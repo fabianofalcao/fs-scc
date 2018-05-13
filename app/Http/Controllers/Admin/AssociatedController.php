@@ -91,7 +91,17 @@ class AssociatedController extends Controller
      */
     public function edit($id)
     {
-        //
+        $associated = $this->associated->with(['user', 'person_physical'])->find($id);
+        if(!$associated)
+        return redirect()->back();
+        $sexos = ['' => 'Selecione o sexo', 'Feminino' => 'Feminino', 'Masculino' => 'Masculino'];
+        $marital_statuses = Marital_status::pluck('description', 'id');
+        $marital_statuses->prepend('Selecione o estado civil...', '');
+        $statuses = ['' => 'Selecione o status...', 'Ativo' => 'Ativo', 'Inativo' => 'Inativo', 'Suspenso' => 'Suspenso', 'Outro' => 'Outro'];
+        $banks = Bank::pluck('name', 'id');
+        $banks->prepend('Selecione o banco...', '');
+        $types_account = ['' => 'Selecione o tipo de conta', 'Conta corrente' => 'Conta corrente', 'Poupança' => 'Poupança', 'Outro' => 'Outro'];
+        return view('admin.associated.edit', compact('associated', 'statuses', 'sexos', 'marital_statuses', 'banks', 'types_account'));
     }
 
     /**
