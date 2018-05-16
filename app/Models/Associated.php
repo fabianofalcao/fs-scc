@@ -26,9 +26,20 @@ class Associated extends Model
         return $this->hasOne(Person_physical::class, 'user_id', 'user_id');
     }
 
+    public function marital_status()
+    {
+        return $this->belongsTo(Marital_status::class);
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
+    }
+
     public function newAssociated($request, $user)
     {
         $dataForm = $request->all();
+        $dataForm['credit_limit'] = str_replace(',','.',str_replace('.','',$dataForm['credit_limit']));
         
         // Verifico se o usuário já exsite
         $exists = Person_physical::where('cpf')->with('user')->get()->first();
@@ -63,5 +74,46 @@ class Associated extends Model
             $associated = $this->create($dataForm); 
             return $associated;
         }
+    }
+
+
+    public function updateAssociated($request, $id)
+    {
+        $dataForm = $request->all();
+        $dataForm['credit_limit'] = str_replace(',','.',str_replace('.','',$dataForm['credit_limit']));
+        
+        //Inicio a transação
+        DB::beginTransaction();
+
+        //Atualizo os dados da tabela associateds
+        $dataForm['date_birth'] = formatDateAndTime(str_replace('/', '-', $dataForm['date_birth']), "Y-m-d");
+        $dataForm['admission_date'] = ($dataForm['admission_date'] != null ? formatDateAndTime(str_replace('/', '-', $dataForm['admission_date']), "Y-m-d") : null);
+        $dataForm['affiliation_date'] = ($dataForm['affiliation_date'] != null ? formatDateAndTime(str_replace('/', '-', $dataForm['affiliation_date']), "Y-m-d") : null);
+        $associated = $this->update($dataForm);
+
+        // Atualizo o usuário, e a person
+        $user = $this->user;
+        $updUser = $user->updateUser($request, $id);
+
+        if($associated && $updUser){
+            DB::commit();
+            return true;
+        } else {
+            DB::rollback();
+            return false;
+        }
+    }
+
+
+
+    public function search($request, $totalPage = 5)
+    {
+        $keySearch = $request->key_search;
+        return $this->join('users', 'users.id', '=', 'associateds.user_id')
+                    ->join('person_physicals', 'person_physicals.user_id', '=', 'users.id')
+                    ->select('associateds.*', 'users.name', 'users.email', 'person_physicals.cpf')
+                    ->where('users.name', 'LIKE', "%{$keySearch}%")
+                    ->orwhere('users.email', 'LIKE', "%{$keySearch}%")
+                    ->paginate($totalPage);
     }
 }

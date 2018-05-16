@@ -41,7 +41,7 @@
             <div class="form-group">
                 <label for="date_birth">Data Nascimento *</label>
                 @if(isset($associated))
-                {!! Form::text('date_birth', $associated->person_physical->date_birth, ['class' => 'form-control input-sm', 'required']) !!}
+                {!! Form::text('date_birth', formatDateAndTime($associated->person_physical->date_birth), ['class' => 'form-control input-sm', 'required']) !!}
                 @else
                 {!! Form::text('date_birth', null, ['class' => 'form-control input-sm', 'required']) !!}
                 @endif
@@ -321,15 +321,17 @@
 
 @push('scripts-user')
     <script src="{{ url('assets/js/input-mask/jquery.inputmask.js') }}"></script>
+    <script src="{{ url('assets/js/jquery-maskmoney/dist/jquery.maskMoney.js') }}"></script>
     <script>
         $(document).ready(function ($) {
-            $("input[name='affiliation_date']").inputmask('99/99/9999', { 'placeholder': '' })
-            $("input[name='admission_date']").inputmask('99/99/9999', { 'placeholder': '' })
-            $("input[name='date_birth']").inputmask('99/99/9999', { 'placeholder': '' })
-            $("input[name='cpf']").inputmask('999.999.999-99', { 'placeholder': '' })
-            $("input[name='phone']").inputmask('(99)9999-9999', { 'placeholder': '' })
-            $("input[name='cell']").inputmask('(99)99999-9999', { 'placeholder': '' })
-            $("input[name='address_zipcode']").inputmask('99999-999', { 'placeholder': '' })
+            $("input[name='affiliation_date']").inputmask('99/99/9999', { 'placeholder': '' });
+            $("input[name='admission_date']").inputmask('99/99/9999', { 'placeholder': '' });
+            $("input[name='date_birth']").inputmask('99/99/9999', { 'placeholder': '' });
+            $("input[name='cpf']").inputmask('999.999.999-99', { 'placeholder': '' });
+            $("input[name='phone']").inputmask('(99)9999-9999', { 'placeholder': '' });
+            $("input[name='cell']").inputmask('(99)99999-9999', { 'placeholder': '' });
+            $("input[name='address_zipcode']").inputmask('99999-999', { 'placeholder': '' });
+            $("input[name='credit_limit']").maskMoney({prefix:'R$ ', allowNegative: true, thousands:'.', decimal:',', affixesStay: false});
 
              /**
             * Integração com os correios API assim que digita o CEP

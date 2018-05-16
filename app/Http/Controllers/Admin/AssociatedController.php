@@ -10,6 +10,7 @@ use App\Role;
 use App\Models\Dependent;
 use App\Models\Marital_status;
 use App\Models\Bank;
+use App\Http\Requests\AssociatedStoreUpdateFormRequest;
 
 class AssociatedController extends Controller
 {
@@ -64,7 +65,7 @@ class AssociatedController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, User $user)
+    public function store(AssociatedStoreUpdateFormRequest $request, User $user)
     {
         if($this->associated->newAssociated($request, $user))
             return redirect()->route('associated.index')->with('success', 'Cadastro realizado com sucesso!');
@@ -80,7 +81,12 @@ class AssociatedController extends Controller
      */
     public function show($id)
     {
-        //
+        $associated = $this->associated->with(['user', 'person_physical','bank', 'marital_status'])->find($id);
+        //dd($associated);
+        if(!$associated)
+            return redirect()->back();
+        
+        return view('admin.associated.show', compact('associated'));
     }
 
     /**
@@ -111,9 +117,13 @@ class AssociatedController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AssociatedStoreUpdateFormRequest $request, $id)
     {
-        //
+        $associated = $this->associated->with(['person_physical', 'user'])->find($id);
+        if($associated->updateAssociated($request, $id))
+            return redirect()->route('associated.index')->with('success', 'Cadastro atualizado com sucesso!');
+        else
+            return redirect()->back()->with('error', 'Falha ao atualizar.');
     }
 
     /**
@@ -125,5 +135,15 @@ class AssociatedController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function search(Request $request)
+    {
+        $dataForm = $request->except('_token');
+        
+        $associateds = $this->associated->search($request, $this->totalPage);
+        //dd($partners);
+        return view('admin.associated.index', compact('associateds', 'dataForm'));
     }
 }
